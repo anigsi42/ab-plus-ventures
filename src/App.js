@@ -6,13 +6,35 @@ const ABPlusVentures = () => {
   const [activeSection, setActiveSection] = useState('hero');
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [sectionProgress, setSectionProgress] = useState({});
   const canvasRef = useRef(null);
 
   useEffect(() => {
     const handleScroll = () => {
       setScrollY(window.scrollY);
       
+      // Calculate progress for each section
       const sections = ['hero', 'thesis', 'how', 'focus', 'ventures', 'principles', 'insights', 'contact'];
+      const progress = {};
+      
+      sections.forEach(section => {
+        const element = document.getElementById(section);
+        if (element) {
+          const rect = element.getBoundingClientRect();
+          const elementTop = rect.top;
+          const elementHeight = rect.height;
+          const viewportHeight = window.innerHeight;
+          
+          // Calculate how much of the section is visible (0 to 1)
+          const visibleProgress = Math.max(0, Math.min(1, 
+            (viewportHeight - elementTop) / (elementHeight + viewportHeight)
+          ));
+          progress[section] = visibleProgress;
+        }
+      });
+      
+      setSectionProgress(progress);
+      
       const current = sections.find(section => {
         const element = document.getElementById(section);
         if (element) {
@@ -22,6 +44,7 @@ const ABPlusVentures = () => {
         return false;
       });
       if (current) setActiveSection(current);
+    };
     };
 
     const handleMouseMove = (e) => {
@@ -216,6 +239,24 @@ const ABPlusVentures = () => {
         }
         .animate-bounce-slow { animation: bounce-slow 2s ease-in-out infinite; }
         .animate-fade { animation: fade-in-out 2s ease-in-out infinite; }
+        
+        /* Parallax and scroll animations */
+        .parallax-text {
+          transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.5s ease;
+        }
+        .fade-in-up {
+          animation: fadeInUp 1s ease-out forwards;
+        }
+        @keyframes fadeInUp {
+          from {
+            opacity: 0;
+            transform: translateY(30px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
       `}</style>
 
       {/* Navigation */}
@@ -360,23 +401,67 @@ const ABPlusVentures = () => {
         {/* Section Divider - Top */}
         <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-violet-500/30 to-transparent"></div>
         
+        {/* Floating geometric shapes for visual interest */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-10">
+          <div 
+            className="absolute top-1/4 right-20 w-64 h-64 border border-violet-500/30 rounded-full"
+            style={{ transform: `translateY(${scrollY * 0.1}px)` }}
+          />
+          <div 
+            className="absolute bottom-1/4 left-20 w-48 h-48 border border-violet-500/20 rotate-45"
+            style={{ transform: `translateY(${-scrollY * 0.08}px) rotate(45deg)` }}
+          />
+        </div>
+        
         <div className="max-w-6xl mx-auto relative z-10">
-          <div className="text-xs tracking-[0.3em] sm:tracking-[0.5em] text-violet-400/60 uppercase mb-6 sm:mb-8 font-light">Thesis</div>
-          <h2 className="text-4xl sm:text-6xl lg:text-7xl font-extralight tracking-tight mb-6 sm:mb-10 bg-gradient-to-r from-white to-violet-200 bg-clip-text text-transparent">
+          <div 
+            className="text-xs tracking-[0.3em] sm:tracking-[0.5em] text-violet-400/60 uppercase mb-6 sm:mb-8 font-light parallax-text"
+            style={{ 
+              transform: `translateY(${(sectionProgress.thesis || 0) * -20}px)`,
+              opacity: Math.max(0.3, 1 - (sectionProgress.thesis || 0) * 0.5)
+            }}
+          >
+            Thesis
+          </div>
+          <h2 
+            className="text-4xl sm:text-6xl lg:text-7xl font-extralight tracking-tight mb-6 sm:mb-10 bg-gradient-to-r from-white to-violet-200 bg-clip-text text-transparent parallax-text"
+            style={{ 
+              transform: `translateY(${(sectionProgress.thesis || 0) * -30}px)`,
+              opacity: Math.max(0.5, 1 - (sectionProgress.thesis || 0) * 0.3)
+            }}
+          >
             Lean is the new scale.
           </h2>
-          <p className="text-2xl sm:text-3xl lg:text-4xl text-white/70 font-extralight mb-12 sm:mb-20">
+          <p 
+            className="text-2xl sm:text-3xl lg:text-4xl text-white/70 font-extralight mb-12 sm:mb-20 parallax-text"
+            style={{ 
+              transform: `translateY(${(sectionProgress.thesis || 0) * -25}px)`,
+              opacity: Math.max(0.6, 1 - (sectionProgress.thesis || 0) * 0.4)
+            }}
+          >
             Solo founders and sharp teams are enough to build what matters.
           </p>
           
           <div className="relative pl-8 sm:pl-12 mb-12 sm:mb-20">
             <div className="absolute left-0 top-0 bottom-0 w-0.5 bg-gradient-to-b from-violet-500 via-purple-500 to-transparent" />
-            <p className="text-xl sm:text-2xl lg:text-3xl text-white/50 italic font-extralight leading-relaxed">
+            <p 
+              className="text-xl sm:text-2xl lg:text-3xl text-white/50 italic font-extralight leading-relaxed parallax-text"
+              style={{ 
+                transform: `translateY(${(sectionProgress.thesis || 0) * -15}px)`,
+                opacity: Math.max(0.4, 1 - (sectionProgress.thesis || 0) * 0.5)
+              }}
+            >
               "History shows us: a handful of people can bend the arc of the future."
             </p>
           </div>
 
-          <p className="text-lg sm:text-xl lg:text-2xl text-white/60 leading-relaxed font-light max-w-5xl">
+          <p 
+            className="text-lg sm:text-xl lg:text-2xl text-white/60 leading-relaxed font-light max-w-5xl parallax-text"
+            style={{ 
+              transform: `translateY(${(sectionProgress.thesis || 0) * -10}px)`,
+              opacity: Math.max(0.5, 1 - (sectionProgress.thesis || 0) * 0.6)
+            }}
+          >
             Our thesis is simple: when purpose and clarity meet exponential technologies, focus beats force. We operate where the curves accelerate, and the singularity shifts from theory to practice.
           </p>
         </div>
@@ -474,9 +559,35 @@ const ABPlusVentures = () => {
         {/* Section Divider - Top */}
         <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-emerald-500/30 to-transparent"></div>
         
+        {/* Animated grid pattern in background */}
+        <div className="absolute inset-0 opacity-5 overflow-hidden pointer-events-none">
+          <div 
+            className="absolute inset-0"
+            style={{
+              backgroundImage: `linear-gradient(rgba(16, 185, 129, 0.3) 1px, transparent 1px), linear-gradient(90deg, rgba(16, 185, 129, 0.3) 1px, transparent 1px)`,
+              backgroundSize: '50px 50px',
+              transform: `translateY(${scrollY * 0.05}px)`
+            }}
+          />
+        </div>
+        
         <div className="max-w-7xl mx-auto relative z-10">
-          <div className="text-xs tracking-[0.3em] sm:tracking-[0.4em] text-white/40 uppercase mb-6 sm:mb-8 font-light">Focus</div>
-          <h2 className="text-4xl sm:text-5xl lg:text-6xl font-extralight tracking-tight mb-16 sm:mb-24">
+          <div 
+            className="text-xs tracking-[0.3em] sm:tracking-[0.4em] text-white/40 uppercase mb-6 sm:mb-8 font-light parallax-text"
+            style={{ 
+              transform: `translateY(${(sectionProgress.focus || 0) * -20}px)`,
+              opacity: Math.max(0.3, 1 - (sectionProgress.focus || 0) * 0.5)
+            }}
+          >
+            Focus
+          </div>
+          <h2 
+            className="text-4xl sm:text-5xl lg:text-6xl font-extralight tracking-tight mb-16 sm:mb-24 parallax-text"
+            style={{ 
+              transform: `translateY(${(sectionProgress.focus || 0) * -30}px)`,
+              opacity: Math.max(0.5, 1 - (sectionProgress.focus || 0) * 0.4)
+            }}
+          >
             Where exponential curves steepen.
           </h2>
 
