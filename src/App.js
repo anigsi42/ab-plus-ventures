@@ -45,6 +45,18 @@ const ABPlusVentures = () => {
       });
       if (current) setActiveSection(current);
     };
+
+    const handleMouseMove = (e) => {
+      setMousePosition({ x: e.clientX, y: e.clientY });
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('mousemove', handleMouseMove);
+    };
+  }, []);
     };
 
     const handleMouseMove = (e) => {
