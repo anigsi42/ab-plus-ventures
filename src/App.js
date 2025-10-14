@@ -6,35 +6,13 @@ const ABPlusVentures = () => {
   const [activeSection, setActiveSection] = useState('hero');
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [sectionProgress, setSectionProgress] = useState({});
   const canvasRef = useRef(null);
 
   useEffect(() => {
     const handleScroll = () => {
       setScrollY(window.scrollY);
       
-      // Calculate progress for each section
       const sections = ['hero', 'thesis', 'how', 'focus', 'ventures', 'principles', 'insights', 'contact'];
-      const progress = {};
-      
-      sections.forEach(section => {
-        const element = document.getElementById(section);
-        if (element) {
-          const rect = element.getBoundingClientRect();
-          const elementTop = rect.top;
-          const elementHeight = rect.height;
-          const viewportHeight = window.innerHeight;
-          
-          // Calculate how much of the section is visible (0 to 1)
-          const visibleProgress = Math.max(0, Math.min(1, 
-            (viewportHeight - elementTop) / (elementHeight + viewportHeight)
-          ));
-          progress[section] = visibleProgress;
-        }
-      });
-      
-      setSectionProgress(progress);
-      
       const current = sections.find(section => {
         const element = document.getElementById(section);
         if (element) {
