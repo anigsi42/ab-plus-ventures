@@ -344,14 +344,11 @@ const ABPlusVentures = () => {
         {/* Scroll Indicator */}
         <button 
           onClick={() => scrollToSection('thesis')}
-          className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-white/40 hover:text-white/60 transition-colors cursor-pointer group z-10"
+          className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center cursor-pointer group z-10"
           aria-label="Scroll down"
         >
-          <span className="text-xs font-light tracking-wider uppercase hidden sm:block animate-fade">Scroll to explore</span>
-          <div className="flex flex-col gap-1 animate-bounce-slow">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" className="text-violet-400">
-              <path d="M12 5v14m0 0l-7-7m7 7l7-7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
+          <div className="w-6 h-10 border-2 border-white/30 rounded-full flex items-start justify-center p-2 group-hover:border-white/50 transition-colors">
+            <div className="w-1.5 h-1.5 bg-violet-400 rounded-full animate-bounce-slow"></div>
           </div>
         </button>
       </section>
@@ -359,6 +356,9 @@ const ABPlusVentures = () => {
       {/* Thesis */}
       <section id="thesis" className="py-20 sm:py-32 lg:py-40 relative px-4 sm:px-6">
         <div className="absolute inset-0 bg-gradient-to-b from-black via-violet-950/20 to-black" />
+        
+        {/* Section Divider - Top */}
+        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-violet-500/30 to-transparent"></div>
         
         <div className="max-w-6xl mx-auto relative z-10">
           <div className="text-xs tracking-[0.3em] sm:tracking-[0.5em] text-violet-400/60 uppercase mb-6 sm:mb-8 font-light">Thesis</div>
@@ -380,11 +380,25 @@ const ABPlusVentures = () => {
             Our thesis is simple: when purpose and clarity meet exponential technologies, focus beats force. We operate where the curves accelerate, and the singularity shifts from theory to practice.
           </p>
         </div>
+
+        {/* Scroll Indicator */}
+        <button 
+          onClick={() => scrollToSection('how')}
+          className="absolute bottom-8 left-1/2 -translate-x-1/2 cursor-pointer group z-10"
+          aria-label="Scroll down"
+        >
+          <div className="w-6 h-10 border-2 border-white/30 rounded-full flex items-start justify-center p-2 group-hover:border-white/50 transition-colors">
+            <div className="w-1.5 h-1.5 bg-violet-400 rounded-full animate-bounce-slow"></div>
+          </div>
+        </button>
       </section>
 
       {/* How We Work */}
       <section id="how" className="py-20 sm:py-32 lg:py-40 relative px-4 sm:px-6">
         <div className="absolute inset-0 bg-gradient-to-b from-black via-purple-950/10 to-black" />
+
+        {/* Section Divider - Top */}
+        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-purple-500/30 to-transparent"></div>
 
         <div className="max-w-7xl mx-auto relative z-10">
           <div className="text-xs tracking-[0.3em] sm:tracking-[0.5em] text-purple-400/60 uppercase mb-6 sm:mb-8 font-light">How We Work</div>
@@ -440,11 +454,25 @@ const ABPlusVentures = () => {
             </div>
           </div>
         </div>
+
+        {/* Scroll Indicator */}
+        <button 
+          onClick={() => scrollToSection('focus')}
+          className="absolute bottom-8 left-1/2 -translate-x-1/2 cursor-pointer group z-10"
+          aria-label="Scroll down"
+        >
+          <div className="w-6 h-10 border-2 border-white/30 rounded-full flex items-start justify-center p-2 group-hover:border-white/50 transition-colors">
+            <div className="w-1.5 h-1.5 bg-purple-400 rounded-full animate-bounce-slow"></div>
+          </div>
+        </button>
       </section>
 
       {/* Focus Areas */}
       <section id="focus" className="py-20 sm:py-28 lg:py-32 relative px-4 sm:px-6">
         <div className="absolute inset-0 bg-gradient-to-b from-black via-emerald-950/10 to-black"></div>
+        
+        {/* Section Divider - Top */}
+        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-emerald-500/30 to-transparent"></div>
         
         <div className="max-w-7xl mx-auto relative z-10">
           <div className="text-xs tracking-[0.3em] sm:tracking-[0.4em] text-white/40 uppercase mb-6 sm:mb-8 font-light">Focus</div>
@@ -484,6 +512,9 @@ const ABPlusVentures = () => {
       {/* Ventures */}
       <section id="ventures" className="py-20 sm:py-28 lg:py-32 relative px-4 sm:px-6">
         <div className="absolute inset-0 bg-gradient-to-b from-black via-blue-950/10 to-black" />
+
+        {/* Section Divider - Top */}
+        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-blue-500/30 to-transparent"></div>
 
         <div className="max-w-7xl mx-auto relative z-10">
           <div className="text-xs tracking-[0.3em] sm:tracking-[0.5em] text-blue-400/60 uppercase mb-6 sm:mb-8 font-light">Ventures</div>
@@ -607,6 +638,9 @@ const ABPlusVentures = () => {
       <section id="principles" className="py-20 sm:py-32 lg:py-40 relative px-4 sm:px-6">
         <div className="absolute inset-0 bg-gradient-to-b from-black via-rose-950/10 to-black" />
 
+        {/* Section Divider - Top */}
+        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-rose-500/30 to-transparent"></div>
+
         <div className="max-w-7xl mx-auto relative z-10">
           <div className="text-xs tracking-[0.3em] sm:tracking-[0.5em] text-rose-400/60 uppercase mb-6 sm:mb-8 font-light">Principles</div>
           <h2 className="text-4xl sm:text-6xl lg:text-7xl font-extralight tracking-tight mb-12 sm:mb-20 bg-gradient-to-r from-white to-rose-200 bg-clip-text text-transparent">
@@ -652,6 +686,9 @@ const ABPlusVentures = () => {
           <WavePattern />
         </div>
 
+        {/* Section Divider - Top */}
+        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-cyan-500/30 to-transparent"></div>
+
         <div className="max-w-6xl mx-auto relative z-10">
           <div className="text-xs tracking-[0.3em] sm:tracking-[0.4em] text-white/40 uppercase mb-6 sm:mb-8 font-light">Insights</div>
           <h2 className="text-4xl sm:text-5xl lg:text-6xl font-extralight tracking-tight mb-6 sm:mb-8">
@@ -684,6 +721,9 @@ const ABPlusVentures = () => {
       {/* Contact */}
       <section id="contact" className="py-20 sm:py-32 lg:py-40 relative px-4 sm:px-6">
         <div className="absolute inset-0 bg-gradient-to-b from-black via-purple-950/10 to-black" />
+
+        {/* Section Divider - Top */}
+        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-purple-500/30 to-transparent"></div>
 
         <div className="max-w-6xl mx-auto text-center relative z-10">
           <div className="text-xs tracking-[0.3em] sm:tracking-[0.5em] text-purple-400/60 uppercase mb-6 sm:mb-8 font-light">Contact</div>
