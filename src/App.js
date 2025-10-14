@@ -200,12 +200,22 @@ const ABPlusVentures = () => {
           0%, 100% { background-position: 0% 50%; }
           50% { background-position: 100% 50%; }
         }
+        @keyframes bounce-slow {
+          0%, 100% { transform: translateY(0); }
+          50% { transform: translateY(-10px); }
+        }
+        @keyframes fade-in-out {
+          0%, 100% { opacity: 0.3; }
+          50% { opacity: 1; }
+        }
         .animate-float { animation: float 6s ease-in-out infinite; }
         .animate-pulse-glow { animation: pulse-glow 3s ease-in-out infinite; }
         .gradient-animate { 
           background-size: 200% 200%;
           animation: gradient-shift 8s ease infinite;
         }
+        .animate-bounce-slow { animation: bounce-slow 2s ease-in-out infinite; }
+        .animate-fade { animation: fade-in-out 2s ease-in-out infinite; }
       `}</style>
 
       {/* Navigation */}
@@ -267,7 +277,7 @@ const ABPlusVentures = () => {
       </nav>
 
       {/* Hero */}
-      <section id="hero" className="min-h-screen flex items-center justify-center relative overflow-hidden px-4 sm:px-6">
+      <section id="hero" className="min-h-screen flex items-center justify-center relative overflow-hidden px-4 sm:px-6 pt-20 sm:pt-24">
         <canvas ref={canvasRef} className="absolute inset-0" />
         
         <div 
@@ -297,7 +307,7 @@ const ABPlusVentures = () => {
 
         <div className="max-w-6xl mx-auto text-center relative z-10">
           <div className="mb-8 sm:mb-12">
-            <h1 className="text-5xl sm:text-7xl lg:text-[8rem] font-extralight tracking-tighter mb-4 sm:mb-6 leading-none bg-gradient-to-r from-white via-violet-200 to-cyan-200 bg-clip-text text-transparent">
+            <h1 className="text-5xl sm:text-6xl lg:text-7xl xl:text-8xl font-extralight tracking-tighter mb-4 sm:mb-6 leading-none bg-gradient-to-r from-white via-violet-200 to-cyan-200 bg-clip-text text-transparent">
               AB Plus Ventures
             </h1>
             <div className="text-xl sm:text-2xl lg:text-3xl text-white/70 font-extralight italic tracking-wide">
@@ -330,6 +340,20 @@ const ABPlusVentures = () => {
             <ArrowRight size={20} />
           </button>
         </div>
+
+        {/* Scroll Indicator */}
+        <button 
+          onClick={() => scrollToSection('thesis')}
+          className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-white/40 hover:text-white/60 transition-colors cursor-pointer group z-10"
+          aria-label="Scroll down"
+        >
+          <span className="text-xs font-light tracking-wider uppercase hidden sm:block animate-fade">Scroll to explore</span>
+          <div className="flex flex-col gap-1 animate-bounce-slow">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" className="text-violet-400">
+              <path d="M12 5v14m0 0l-7-7m7 7l7-7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          </div>
+        </button>
       </section>
 
       {/* Thesis */}
