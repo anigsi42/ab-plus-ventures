@@ -1,10 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { ArrowRight, Cpu, Dna, Brain, Satellite, GitBranch, Network, Zap, Hexagon } from 'lucide-react';
+import { ArrowRight, Cpu, Dna, Brain, Satellite, GitBranch, Network, Zap, Hexagon, Menu, X } from 'lucide-react';
 
 const ABPlusVentures = () => {
   const [scrollY, setScrollY] = useState(0);
   const [activeSection, setActiveSection] = useState('hero');
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const canvasRef = useRef(null);
 
   useEffect(() => {
@@ -44,7 +45,7 @@ const ABPlusVentures = () => {
     canvas.height = window.innerHeight * 1.2;
 
     const particles = [];
-    const particleCount = 120;
+    const particleCount = window.innerWidth < 768 ? 60 : 120; // Fewer particles on mobile
 
     class Particle {
       constructor() {
@@ -117,6 +118,7 @@ const ABPlusVentures = () => {
 
   const scrollToSection = (id) => {
     document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    setMobileMenuOpen(false);
   };
 
   const focusAreas = [
@@ -208,14 +210,16 @@ const ABPlusVentures = () => {
 
       {/* Navigation */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-black/40 backdrop-blur-3xl border-b border-white/5">
-        <div className="max-w-7xl mx-auto px-8 py-6 flex items-center justify-between">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6 flex items-center justify-between">
           <button 
             onClick={() => scrollToSection('hero')}
-            className="text-2xl font-extralight tracking-tight hover:text-white/80 transition-colors"
+            className="text-xl sm:text-2xl font-extralight tracking-tight hover:text-white/80 transition-colors"
           >
             AB Plus Ventures
           </button>
-          <div className="flex gap-10 text-sm">
+          
+          {/* Desktop Navigation */}
+          <div className="hidden lg:flex gap-6 xl:gap-10 text-sm">
             {['Thesis', 'Focus', 'Ventures', 'Principles', 'Insights', 'Contact'].map((item) => (
               <button
                 key={item}
@@ -230,15 +234,44 @@ const ABPlusVentures = () => {
               </button>
             ))}
           </div>
+
+          {/* Mobile Menu Button */}
+          <button 
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            className="lg:hidden p-2 text-white/80 hover:text-white transition-colors"
+          >
+            {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
         </div>
+
+        {/* Mobile Menu */}
+        {mobileMenuOpen && (
+          <div className="lg:hidden bg-black/95 backdrop-blur-3xl border-t border-white/5">
+            <div className="px-4 py-6 space-y-4">
+              {['Thesis', 'Focus', 'Ventures', 'Principles', 'Insights', 'Contact'].map((item) => (
+                <button
+                  key={item}
+                  onClick={() => scrollToSection(item.toLowerCase())}
+                  className={`block w-full text-left py-2 transition-colors font-light ${
+                    activeSection === item.toLowerCase() 
+                      ? 'text-white' 
+                      : 'text-white/50'
+                  }`}
+                >
+                  {item}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
       </nav>
 
       {/* Hero */}
-      <section id="hero" className="min-h-screen flex items-center justify-center relative overflow-hidden">
+      <section id="hero" className="min-h-screen flex items-center justify-center relative overflow-hidden px-4 sm:px-6">
         <canvas ref={canvasRef} className="absolute inset-0" />
         
         <div 
-          className="absolute w-[800px] h-[800px] rounded-full blur-3xl opacity-20 bg-gradient-to-r from-violet-600 to-purple-600 animate-pulse-glow"
+          className="absolute w-[400px] sm:w-[600px] lg:w-[800px] h-[400px] sm:h-[600px] lg:h-[800px] rounded-full blur-3xl opacity-20 bg-gradient-to-r from-violet-600 to-purple-600 animate-pulse-glow"
           style={{
             top: '20%',
             left: '10%',
@@ -246,7 +279,7 @@ const ABPlusVentures = () => {
           }}
         />
         <div 
-          className="absolute w-[600px] h-[600px] rounded-full blur-3xl opacity-20 bg-gradient-to-r from-cyan-500 to-blue-600 animate-pulse-glow"
+          className="absolute w-[300px] sm:w-[500px] lg:w-[600px] h-[300px] sm:h-[500px] lg:h-[600px] rounded-full blur-3xl opacity-20 bg-gradient-to-r from-cyan-500 to-blue-600 animate-pulse-glow"
           style={{
             bottom: '20%',
             right: '10%',
@@ -256,22 +289,22 @@ const ABPlusVentures = () => {
         />
 
         <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-5">
-          <div className="absolute top-20 left-10 text-[12rem] font-extralight animate-float" style={{ animationDelay: '0s' }}>α</div>
-          <div className="absolute top-1/3 right-20 text-[10rem] font-extralight animate-float" style={{ animationDelay: '1s' }}>β</div>
-          <div className="absolute bottom-20 left-1/4 text-[8rem] font-extralight animate-float" style={{ animationDelay: '2s' }}>γ</div>
-          <div className="absolute bottom-1/3 right-1/3 text-[14rem] font-extralight animate-float" style={{ animationDelay: '1.5s' }}>Ω</div>
+          <div className="hidden sm:block absolute top-20 left-10 text-[8rem] lg:text-[12rem] font-extralight animate-float" style={{ animationDelay: '0s' }}>α</div>
+          <div className="hidden sm:block absolute top-1/3 right-20 text-[6rem] lg:text-[10rem] font-extralight animate-float" style={{ animationDelay: '1s' }}>β</div>
+          <div className="hidden sm:block absolute bottom-20 left-1/4 text-[5rem] lg:text-[8rem] font-extralight animate-float" style={{ animationDelay: '2s' }}>γ</div>
+          <div className="hidden sm:block absolute bottom-1/3 right-1/3 text-[8rem] lg:text-[14rem] font-extralight animate-float" style={{ animationDelay: '1.5s' }}>Ω</div>
         </div>
 
-        <div className="max-w-6xl mx-auto px-8 text-center relative z-10">
-          <div className="mb-12">
-            <h1 className="text-[8rem] font-extralight tracking-tighter mb-6 leading-none bg-gradient-to-r from-white via-violet-200 to-cyan-200 bg-clip-text text-transparent">
+        <div className="max-w-6xl mx-auto text-center relative z-10">
+          <div className="mb-8 sm:mb-12">
+            <h1 className="text-5xl sm:text-7xl lg:text-[8rem] font-extralight tracking-tighter mb-4 sm:mb-6 leading-none bg-gradient-to-r from-white via-violet-200 to-cyan-200 bg-clip-text text-transparent">
               AB Plus Ventures
             </h1>
-            <div className="text-3xl text-white/70 font-extralight italic tracking-wide">
+            <div className="text-xl sm:text-2xl lg:text-3xl text-white/70 font-extralight italic tracking-wide">
               Lean. Exponential. Inevitable.
             </div>
             
-            <div className="mt-8 flex items-center justify-center gap-4 text-white/30 text-lg font-extralight">
+            <div className="mt-6 sm:mt-8 flex items-center justify-center gap-2 sm:gap-4 text-base sm:text-lg text-white/30 font-extralight">
               <span className="text-violet-400">α</span>
               <span>→</span>
               <span className="text-purple-400">β</span>
@@ -285,13 +318,13 @@ const ABPlusVentures = () => {
             </div>
           </div>
           
-          <p className="text-2xl text-white/60 leading-relaxed max-w-5xl mx-auto font-light">
+          <p className="text-lg sm:text-xl lg:text-2xl text-white/60 leading-relaxed max-w-5xl mx-auto font-light px-4">
             "We believe the next greatest ventures won't be built by massive institutions or armies of people — they'll be created by solo founders and lean teams, moving with precision at the edge of exponential technologies. AB Plus Ventures partners deeply at this frontier: building, advising, and accelerating the companies shaping the singularity."
           </p>
 
           <button 
             onClick={() => scrollToSection('thesis')}
-            className="mt-20 inline-flex items-center gap-3 px-10 py-5 bg-gradient-to-r from-violet-600 to-purple-600 text-white rounded-full hover:shadow-2xl hover:shadow-violet-500/50 transition-all hover:gap-4 font-light text-lg"
+            className="mt-12 sm:mt-20 inline-flex items-center gap-3 px-8 sm:px-10 py-4 sm:py-5 bg-gradient-to-r from-violet-600 to-purple-600 text-white rounded-full hover:shadow-2xl hover:shadow-violet-500/50 transition-all hover:gap-4 font-light text-base sm:text-lg"
           >
             Explore Our Thesis
             <ArrowRight size={20} />
@@ -300,46 +333,46 @@ const ABPlusVentures = () => {
       </section>
 
       {/* Thesis */}
-      <section id="thesis" className="py-40 relative">
+      <section id="thesis" className="py-20 sm:py-32 lg:py-40 relative px-4 sm:px-6">
         <div className="absolute inset-0 bg-gradient-to-b from-black via-violet-950/20 to-black" />
         
-        <div className="max-w-6xl mx-auto px-8 relative z-10">
-          <div className="text-xs tracking-[0.5em] text-violet-400/60 uppercase mb-8 font-light">Thesis</div>
-          <h2 className="text-7xl font-extralight tracking-tight mb-10 bg-gradient-to-r from-white to-violet-200 bg-clip-text text-transparent">
+        <div className="max-w-6xl mx-auto relative z-10">
+          <div className="text-xs tracking-[0.3em] sm:tracking-[0.5em] text-violet-400/60 uppercase mb-6 sm:mb-8 font-light">Thesis</div>
+          <h2 className="text-4xl sm:text-6xl lg:text-7xl font-extralight tracking-tight mb-6 sm:mb-10 bg-gradient-to-r from-white to-violet-200 bg-clip-text text-transparent">
             Lean is the new scale.
           </h2>
-          <p className="text-4xl text-white/70 font-extralight mb-20">
+          <p className="text-2xl sm:text-3xl lg:text-4xl text-white/70 font-extralight mb-12 sm:mb-20">
             Solo founders and sharp teams are enough to build what matters.
           </p>
           
-          <div className="relative pl-12 mb-20">
+          <div className="relative pl-8 sm:pl-12 mb-12 sm:mb-20">
             <div className="absolute left-0 top-0 bottom-0 w-0.5 bg-gradient-to-b from-violet-500 via-purple-500 to-transparent" />
-            <p className="text-3xl text-white/50 italic font-extralight leading-relaxed">
+            <p className="text-xl sm:text-2xl lg:text-3xl text-white/50 italic font-extralight leading-relaxed">
               "History shows us: a handful of people can bend the arc of the future."
             </p>
           </div>
 
-          <p className="text-2xl text-white/60 leading-relaxed font-light max-w-5xl">
+          <p className="text-lg sm:text-xl lg:text-2xl text-white/60 leading-relaxed font-light max-w-5xl">
             Our thesis is simple: when purpose and clarity meet exponential technologies, focus beats force. We operate where the curves accelerate, and the singularity shifts from theory to practice.
           </p>
         </div>
       </section>
 
       {/* How We Work */}
-      <section id="how" className="py-40 relative">
+      <section id="how" className="py-20 sm:py-32 lg:py-40 relative px-4 sm:px-6">
         <div className="absolute inset-0 bg-gradient-to-b from-black via-purple-950/10 to-black" />
 
-        <div className="max-w-7xl mx-auto px-8 relative z-10">
-          <div className="text-xs tracking-[0.5em] text-purple-400/60 uppercase mb-8 font-light">How We Work</div>
+        <div className="max-w-7xl mx-auto relative z-10">
+          <div className="text-xs tracking-[0.3em] sm:tracking-[0.5em] text-purple-400/60 uppercase mb-6 sm:mb-8 font-light">How We Work</div>
           
-          <div className="relative pl-12 mb-24">
+          <div className="relative pl-8 sm:pl-12 mb-16 sm:mb-24">
             <div className="absolute left-0 top-0 bottom-0 w-0.5 bg-gradient-to-b from-purple-500 via-pink-500 to-transparent" />
-            <p className="text-3xl text-white/50 italic font-extralight leading-relaxed">
+            <p className="text-xl sm:text-2xl lg:text-3xl text-white/50 italic font-extralight leading-relaxed">
               "Embedded partnership. Precision at the critical edge. Every venture is unique."
             </p>
           </div>
 
-          <div className="grid grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
             {[
               { num: "01", title: "Conviction", desc: "We move with deep conviction at the intersection of exponential technologies and inevitable markets.", color: "violet" },
               { num: "02", title: "Creation", desc: "We build with precision, iterating rapidly where the curves steepen and acceleration compounds.", color: "purple" },
@@ -347,12 +380,12 @@ const ABPlusVentures = () => {
             ].map((item, idx) => (
               <div key={idx} className="group relative">
                 <div className={`absolute inset-0 bg-gradient-to-br from-${item.color}-600/10 to-transparent rounded-3xl opacity-0 group-hover:opacity-100 transition-all duration-500 blur-xl`} />
-                <div className={`relative p-10 bg-gradient-to-br from-${item.color}-950/30 to-black/50 backdrop-blur-xl border border-white/5 rounded-3xl hover:border-${item.color}-500/30 transition-all duration-500 hover:shadow-2xl hover:shadow-${item.color}-500/20 hover:-translate-y-2`}>
-                  <div className={`text-8xl font-extralight text-${item.color}-500/20 mb-8 group-hover:text-${item.color}-500/40 transition-colors`}>
+                <div className={`relative p-8 sm:p-10 bg-gradient-to-br from-${item.color}-950/30 to-black/50 backdrop-blur-xl border border-white/5 rounded-3xl hover:border-${item.color}-500/30 transition-all duration-500 hover:shadow-2xl hover:shadow-${item.color}-500/20 hover:-translate-y-2`}>
+                  <div className={`text-6xl sm:text-8xl font-extralight text-${item.color}-500/20 mb-6 sm:mb-8 group-hover:text-${item.color}-500/40 transition-colors`}>
                     {item.num}
                   </div>
-                  <h3 className="text-3xl font-light mb-5">{item.title}</h3>
-                  <p className="text-white/50 font-light leading-relaxed text-lg">
+                  <h3 className="text-2xl sm:text-3xl font-light mb-4 sm:mb-5">{item.title}</h3>
+                  <p className="text-white/50 font-light leading-relaxed text-base sm:text-lg">
                     {item.desc}
                   </p>
                 </div>
@@ -363,35 +396,35 @@ const ABPlusVentures = () => {
       </section>
 
       {/* Focus Areas */}
-      <section id="focus" className="py-32 relative">
+      <section id="focus" className="py-20 sm:py-28 lg:py-32 relative px-4 sm:px-6">
         <div className="absolute inset-0 bg-gradient-to-b from-black via-emerald-950/10 to-black"></div>
         
-        <div className="max-w-7xl mx-auto px-8 relative z-10">
-          <div className="text-xs tracking-[0.4em] text-white/40 uppercase mb-8 font-light">Focus</div>
-          <h2 className="text-6xl font-extralight tracking-tight mb-24">
+        <div className="max-w-7xl mx-auto relative z-10">
+          <div className="text-xs tracking-[0.3em] sm:tracking-[0.4em] text-white/40 uppercase mb-6 sm:mb-8 font-light">Focus</div>
+          <h2 className="text-4xl sm:text-5xl lg:text-6xl font-extralight tracking-tight mb-16 sm:mb-24">
             Where exponential curves steepen.
           </h2>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
             {focusAreas.map((area, index) => {
               const Icon = area.icon;
               return (
                 <div 
                   key={index}
-                  className="group relative p-12 border border-white/10 rounded-3xl hover:border-white/30 transition-all duration-500 overflow-hidden backdrop-blur-sm"
+                  className="group relative p-8 sm:p-10 lg:p-12 border border-white/10 rounded-3xl hover:border-white/30 transition-all duration-500 overflow-hidden backdrop-blur-sm"
                 >
                   <div className={`absolute inset-0 bg-gradient-to-br ${area.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-500`}></div>
                   
-                  <div className="absolute top-8 right-8 text-9xl font-extralight text-white/5 group-hover:text-white/10 transition-colors">
+                  <div className="absolute top-6 right-6 sm:top-8 sm:right-8 text-6xl sm:text-8xl lg:text-9xl font-extralight text-white/5 group-hover:text-white/10 transition-colors">
                     {area.symbol}
                   </div>
                   
-                  <div className="relative z-10 mb-6">
-                    <Icon size={40} className="text-white/40 group-hover:text-white/80 transition-colors" strokeWidth={1} />
+                  <div className="relative z-10 mb-4 sm:mb-6">
+                    <Icon size={32} className="sm:w-10 sm:h-10 text-white/40 group-hover:text-white/80 transition-colors" strokeWidth={1} />
                   </div>
                   
-                  <h3 className="text-2xl font-light mb-4 relative z-10">{area.title}</h3>
-                  <p className="text-white/60 leading-relaxed font-light relative z-10">
+                  <h3 className="text-xl sm:text-2xl font-light mb-3 sm:mb-4 relative z-10">{area.title}</h3>
+                  <p className="text-white/60 leading-relaxed font-light text-sm sm:text-base relative z-10">
                     {area.description}
                   </p>
                 </div>
@@ -402,18 +435,18 @@ const ABPlusVentures = () => {
       </section>
 
       {/* Ventures */}
-      <section id="ventures" className="py-32 relative">
+      <section id="ventures" className="py-20 sm:py-28 lg:py-32 relative px-4 sm:px-6">
         <div className="absolute inset-0 bg-gradient-to-b from-black via-blue-950/10 to-black" />
 
-        <div className="max-w-7xl mx-auto px-8 relative z-10">
-          <div className="text-xs tracking-[0.5em] text-blue-400/60 uppercase mb-8 font-light">Ventures</div>
-          <h2 className="text-6xl font-extralight tracking-tight mb-16">
+        <div className="max-w-7xl mx-auto relative z-10">
+          <div className="text-xs tracking-[0.3em] sm:tracking-[0.5em] text-blue-400/60 uppercase mb-6 sm:mb-8 font-light">Ventures</div>
+          <h2 className="text-4xl sm:text-5xl lg:text-6xl font-extralight tracking-tight mb-12 sm:mb-16">
             Where the future takes form.
           </h2>
 
-          <div className="grid grid-cols-2 gap-6 max-md:grid-cols-1">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
             {/* AI-Native Infrastructure */}
-            <div className="group relative h-96 rounded-3xl overflow-hidden border border-white/10 hover:border-white/20 transition-all">
+            <div className="group relative h-80 sm:h-96 rounded-3xl overflow-hidden border border-white/10 hover:border-white/20 transition-all">
               <div className="absolute inset-0 bg-gradient-to-br from-violet-950/50 via-purple-950/30 to-black" />
               <svg className="absolute inset-0 w-full h-full opacity-20" xmlns="http://www.w3.org/2000/svg">
                 <defs>
@@ -431,19 +464,19 @@ const ABPlusVentures = () => {
                 </defs>
                 <rect width="100%" height="100%" fill="url(#neural)"/>
               </svg>
-              <div className="relative h-full p-10 flex flex-col justify-between">
+              <div className="relative h-full p-6 sm:p-8 lg:p-10 flex flex-col justify-between">
                 <div>
-                  <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/5 backdrop-blur-sm rounded-full text-xs font-light mb-6 border border-white/10">
+                  <div className="inline-flex items-center gap-2 px-3 sm:px-4 py-1.5 sm:py-2 bg-white/5 backdrop-blur-sm rounded-full text-xs font-light mb-4 sm:mb-6 border border-white/10">
                     <Cpu size={14} />
                     Intelligence
                   </div>
-                  <h3 className="text-3xl font-light mb-4">AI-Native Infrastructure</h3>
+                  <h3 className="text-2xl sm:text-3xl font-light mb-3 sm:mb-4">AI-Native Infrastructure</h3>
                   <p className="text-white/70 font-light leading-relaxed text-sm">
                     Intelligence as infrastructure. Autonomous agents, reasoning systems, and AI-native architectures re-architecting markets, networks, and capital.
                   </p>
                 </div>
-                <div className="flex gap-3 flex-wrap">
-                  <span className="px-6 py-2 bg-white/10 backdrop-blur-sm text-white rounded-full text-sm font-light border border-white/20 hover:bg-white/20 transition-colors cursor-pointer">
+                <div className="flex gap-2 sm:gap-3 flex-wrap">
+                  <span className="px-4 sm:px-6 py-1.5 sm:py-2 bg-white/10 backdrop-blur-sm text-white rounded-full text-xs sm:text-sm font-light border border-white/20 hover:bg-white/20 transition-colors cursor-pointer">
                     Sequence Sync
                   </span>
                 </div>
@@ -451,7 +484,7 @@ const ABPlusVentures = () => {
             </div>
 
             {/* Programmable Biology */}
-            <div className="group relative h-96 rounded-3xl overflow-hidden border border-white/10 hover:border-white/20 transition-all">
+            <div className="group relative h-80 sm:h-96 rounded-3xl overflow-hidden border border-white/10 hover:border-white/20 transition-all">
               <div className="absolute inset-0 bg-gradient-to-br from-emerald-950/50 via-teal-950/30 to-black" />
               <svg className="absolute inset-0 w-full h-full opacity-20" xmlns="http://www.w3.org/2000/svg">
                 <defs>
@@ -466,19 +499,19 @@ const ABPlusVentures = () => {
                 </defs>
                 <rect width="100%" height="100%" fill="url(#dna-helix)"/>
               </svg>
-              <div className="relative h-full p-10 flex flex-col justify-between">
+              <div className="relative h-full p-6 sm:p-8 lg:p-10 flex flex-col justify-between">
                 <div>
-                  <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/5 backdrop-blur-sm rounded-full text-xs font-light mb-6 border border-white/10">
+                  <div className="inline-flex items-center gap-2 px-3 sm:px-4 py-1.5 sm:py-2 bg-white/5 backdrop-blur-sm rounded-full text-xs font-light mb-4 sm:mb-6 border border-white/10">
                     <Dna size={14} />
                     Biology
                   </div>
-                  <h3 className="text-3xl font-light mb-4">Programmable Biology</h3>
+                  <h3 className="text-2xl sm:text-3xl font-light mb-3 sm:mb-4">Programmable Biology</h3>
                   <p className="text-white/70 font-light leading-relaxed text-sm">
                     Biology and medicine as code. Enabling longevity, prevention, precision, and personalization.
                   </p>
                 </div>
-                <div className="flex gap-3 flex-wrap">
-                  <span className="px-6 py-2 bg-white/10 backdrop-blur-sm text-white rounded-full text-sm font-light border border-white/20 hover:bg-white/20 transition-colors cursor-pointer">
+                <div className="flex gap-2 sm:gap-3 flex-wrap">
+                  <span className="px-4 sm:px-6 py-1.5 sm:py-2 bg-white/10 backdrop-blur-sm text-white rounded-full text-xs sm:text-sm font-light border border-white/20 hover:bg-white/20 transition-colors cursor-pointer">
                     CellSight AI
                   </span>
                 </div>
@@ -486,7 +519,7 @@ const ABPlusVentures = () => {
             </div>
 
             {/* New Signals of Value */}
-            <div className="group relative h-96 rounded-3xl overflow-hidden border border-white/10 hover:border-white/20 transition-all col-span-2 max-md:col-span-1">
+            <div className="group relative h-80 sm:h-96 rounded-3xl overflow-hidden border border-white/10 hover:border-white/20 transition-all lg:col-span-2">
               <div className="absolute inset-0 bg-gradient-to-br from-blue-950/50 via-cyan-950/30 to-black" />
               <svg className="absolute inset-0 w-full h-full opacity-20" xmlns="http://www.w3.org/2000/svg">
                 <defs>
@@ -498,22 +531,22 @@ const ABPlusVentures = () => {
                 </defs>
                 <rect width="100%" height="100%" fill="url(#signals)"/>
               </svg>
-              <div className="relative h-full p-10 flex flex-col justify-between">
+              <div className="relative h-full p-6 sm:p-8 lg:p-10 flex flex-col justify-between">
                 <div>
-                  <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/5 backdrop-blur-sm rounded-full text-xs font-light mb-6 border border-white/10">
+                  <div className="inline-flex items-center gap-2 px-3 sm:px-4 py-1.5 sm:py-2 bg-white/5 backdrop-blur-sm rounded-full text-xs font-light mb-4 sm:mb-6 border border-white/10">
                     <Network size={14} />
                     Markets
                   </div>
-                  <h3 className="text-3xl font-light mb-4">New Signals of Value</h3>
+                  <h3 className="text-2xl sm:text-3xl font-light mb-3 sm:mb-4">New Signals of Value</h3>
                   <p className="text-white/70 font-light leading-relaxed text-sm max-w-3xl">
                     Markets that measure what matters. Prediction, adoption, momentum, growth.
                   </p>
                 </div>
-                <div className="flex gap-3 flex-wrap">
-                  <span className="px-6 py-2 bg-white/10 backdrop-blur-sm text-white rounded-full text-sm font-light border border-white/20 hover:bg-white/20 transition-colors cursor-pointer">
+                <div className="flex gap-2 sm:gap-3 flex-wrap">
+                  <span className="px-4 sm:px-6 py-1.5 sm:py-2 bg-white/10 backdrop-blur-sm text-white rounded-full text-xs sm:text-sm font-light border border-white/20 hover:bg-white/20 transition-colors cursor-pointer">
                     iFutures
                   </span>
-                  <span className="px-6 py-2 bg-white/10 backdrop-blur-sm text-white rounded-full text-sm font-light border border-white/20 hover:bg-white/20 transition-colors cursor-pointer">
+                  <span className="px-4 sm:px-6 py-1.5 sm:py-2 bg-white/10 backdrop-blur-sm text-white rounded-full text-xs sm:text-sm font-light border border-white/20 hover:bg-white/20 transition-colors cursor-pointer">
                     Nexus IP
                   </span>
                 </div>
@@ -524,16 +557,16 @@ const ABPlusVentures = () => {
       </section>
 
       {/* Principles */}
-      <section id="principles" className="py-40 relative">
+      <section id="principles" className="py-20 sm:py-32 lg:py-40 relative px-4 sm:px-6">
         <div className="absolute inset-0 bg-gradient-to-b from-black via-rose-950/10 to-black" />
 
-        <div className="max-w-7xl mx-auto px-8 relative z-10">
-          <div className="text-xs tracking-[0.5em] text-rose-400/60 uppercase mb-8 font-light">Principles</div>
-          <h2 className="text-7xl font-extralight tracking-tight mb-20 bg-gradient-to-r from-white to-rose-200 bg-clip-text text-transparent">
+        <div className="max-w-7xl mx-auto relative z-10">
+          <div className="text-xs tracking-[0.3em] sm:tracking-[0.5em] text-rose-400/60 uppercase mb-6 sm:mb-8 font-light">Principles</div>
+          <h2 className="text-4xl sm:text-6xl lg:text-7xl font-extralight tracking-tight mb-12 sm:mb-20 bg-gradient-to-r from-white to-rose-200 bg-clip-text text-transparent">
             How we operate.
           </h2>
 
-          <div className="grid grid-cols-3 gap-6 max-md:grid-cols-1">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
             {[
               { title: "Lean team ethos", desc: "Proof that greatness doesn't require armies" },
               { title: "Embedded partnership", desc: "We step in when it matters, not from the sidelines" },
@@ -545,14 +578,14 @@ const ABPlusVentures = () => {
             ].map((principle, index) => (
               <div 
                 key={index} 
-                className="group relative p-8 bg-gradient-to-br from-white/5 to-transparent border border-white/10 rounded-2xl hover:border-rose-500/30 hover:bg-white/10 transition-all duration-500 hover:-translate-y-1"
+                className="group relative p-6 sm:p-8 bg-gradient-to-br from-white/5 to-transparent border border-white/10 rounded-2xl hover:border-rose-500/30 hover:bg-white/10 transition-all duration-500 hover:-translate-y-1"
               >
                 <div className="absolute inset-0 bg-gradient-to-br from-rose-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl" />
                 <div className="relative z-10">
-                  <div className="text-rose-500/40 font-extralight text-sm mb-4 group-hover:text-rose-400/60 transition-colors">
+                  <div className="text-rose-500/40 font-extralight text-sm mb-3 sm:mb-4 group-hover:text-rose-400/60 transition-colors">
                     {String(index + 1).padStart(2, '0')}
                   </div>
-                  <h3 className="text-xl font-light mb-3 group-hover:text-white transition-colors">
+                  <h3 className="text-lg sm:text-xl font-light mb-2 sm:mb-3 group-hover:text-white transition-colors">
                     {principle.title}
                   </h3>
                   <p className="text-white/50 group-hover:text-white/70 font-light leading-relaxed text-sm transition-colors">
@@ -566,30 +599,30 @@ const ABPlusVentures = () => {
       </section>
 
       {/* Insights */}
-      <section id="insights" className="py-32 relative">
+      <section id="insights" className="py-20 sm:py-28 lg:py-32 relative px-4 sm:px-6">
         <div className="absolute inset-0">
           <div className="absolute inset-0 bg-gradient-to-b from-black via-cyan-950/10 to-black"></div>
           <WavePattern />
         </div>
 
-        <div className="max-w-6xl mx-auto px-8 relative z-10">
-          <div className="text-xs tracking-[0.4em] text-white/40 uppercase mb-8 font-light">Insights</div>
-          <h2 className="text-6xl font-extralight tracking-tight mb-8">
+        <div className="max-w-6xl mx-auto relative z-10">
+          <div className="text-xs tracking-[0.3em] sm:tracking-[0.4em] text-white/40 uppercase mb-6 sm:mb-8 font-light">Insights</div>
+          <h2 className="text-4xl sm:text-5xl lg:text-6xl font-extralight tracking-tight mb-6 sm:mb-8">
             Frontier Insights
           </h2>
-          <p className="text-xl text-white/60 font-light mb-16 max-w-3xl">
+          <p className="text-lg sm:text-xl text-white/60 font-light mb-12 sm:mb-16 max-w-3xl">
             Stay ahead of the curves reshaping intelligence, biology, and the frontier economy. Weekly perspectives, delivered simply.
           </p>
 
-          <div className="flex gap-4 mb-12 max-w-2xl">
+          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 mb-8 sm:mb-12 max-w-2xl">
             <input 
               type="email"
               placeholder="your@email.com"
-              className="flex-1 px-6 py-4 bg-white/5 border border-white/20 rounded-full focus:outline-none focus:border-white/40 transition-colors font-light text-white placeholder-white/40"
+              className="flex-1 px-5 sm:px-6 py-3 sm:py-4 bg-white/5 border border-white/20 rounded-full focus:outline-none focus:border-white/40 transition-colors font-light text-white placeholder-white/40"
             />
             <a 
               href="mailto:anitha@abplusventures.com"
-              className="px-8 py-4 bg-white text-black rounded-full hover:bg-white/90 transition-all font-light inline-block"
+              className="px-6 sm:px-8 py-3 sm:py-4 bg-white text-black rounded-full hover:bg-white/90 transition-all font-light text-center"
             >
               Subscribe
             </a>
@@ -602,21 +635,21 @@ const ABPlusVentures = () => {
       </section>
 
       {/* Contact */}
-      <section id="contact" className="py-40 relative">
+      <section id="contact" className="py-20 sm:py-32 lg:py-40 relative px-4 sm:px-6">
         <div className="absolute inset-0 bg-gradient-to-b from-black via-purple-950/10 to-black" />
 
-        <div className="max-w-6xl mx-auto px-8 text-center relative z-10">
-          <div className="text-xs tracking-[0.5em] text-purple-400/60 uppercase mb-8 font-light">Contact</div>
-          <h2 className="text-7xl font-extralight tracking-tight mb-12 bg-gradient-to-r from-white to-purple-200 bg-clip-text text-transparent">
+        <div className="max-w-6xl mx-auto text-center relative z-10">
+          <div className="text-xs tracking-[0.3em] sm:tracking-[0.5em] text-purple-400/60 uppercase mb-6 sm:mb-8 font-light">Contact</div>
+          <h2 className="text-4xl sm:text-6xl lg:text-7xl font-extralight tracking-tight mb-8 sm:mb-12 bg-gradient-to-r from-white to-purple-200 bg-clip-text text-transparent">
             Building at the edge?
           </h2>
-          <p className="text-2xl text-white/60 font-light mb-20 max-w-3xl mx-auto leading-relaxed">
+          <p className="text-lg sm:text-xl lg:text-2xl text-white/60 font-light mb-12 sm:mb-20 max-w-3xl mx-auto leading-relaxed">
             Are you building solo? In stealth? With a lean team at the edge? We want to hear from you.
           </p>
           
           <a 
             href="mailto:anitha@abplusventures.com"
-            className="px-14 py-6 bg-gradient-to-r from-violet-600 to-purple-600 text-white rounded-full hover:shadow-2xl hover:shadow-purple-500/50 transition-all text-xl font-light hover:scale-105 inline-block"
+            className="px-10 sm:px-14 py-4 sm:py-6 bg-gradient-to-r from-violet-600 to-purple-600 text-white rounded-full hover:shadow-2xl hover:shadow-purple-500/50 transition-all text-lg sm:text-xl font-light hover:scale-105 inline-block"
           >
             Get in Touch
           </a>
@@ -624,21 +657,21 @@ const ABPlusVentures = () => {
       </section>
 
       {/* Closing */}
-      <section className="py-40 relative">
+      <section className="py-20 sm:py-32 lg:py-40 relative px-4 sm:px-6">
         <div className="absolute inset-0 bg-gradient-to-b from-black to-gray-950" />
         
-        <div className="max-w-5xl mx-auto px-8 text-center relative z-10">
-          <div className="border-t border-white/10 pt-24 pb-16">
-            <p className="text-4xl text-white/60 italic font-extralight leading-relaxed">
+        <div className="max-w-5xl mx-auto text-center relative z-10">
+          <div className="border-t border-white/10 pt-16 sm:pt-24 pb-12 sm:pb-16">
+            <p className="text-2xl sm:text-3xl lg:text-4xl text-white/60 italic font-extralight leading-relaxed">
               "Our ventures are born where exponential technologies meet inevitable markets. We build what matters, prove it early, and let momentum compound."
             </p>
           </div>
           
-          <div className="mt-24 pt-24 border-t border-white/10">
-            <div className="text-2xl font-light tracking-tight mb-8">
+          <div className="mt-16 sm:mt-24 pt-16 sm:pt-24 border-t border-white/10">
+            <div className="text-xl sm:text-2xl font-light tracking-tight mb-6 sm:mb-8">
               AB Plus Ventures
             </div>
-            <div className="text-base text-white/30 font-light flex items-center justify-center gap-4 mb-4">
+            <div className="text-sm sm:text-base text-white/30 font-light flex items-center justify-center gap-3 sm:gap-4 mb-4 flex-wrap">
               <span className="text-violet-400">α</span>
               <span>→</span>
               <span className="text-purple-400">β</span>
@@ -648,7 +681,7 @@ const ABPlusVentures = () => {
               <span>→</span>
               <span className="text-cyan-400">ω</span>
             </div>
-            <div className="text-sm text-white/40 font-light mt-8">
+            <div className="text-xs sm:text-sm text-white/40 font-light mt-6 sm:mt-8">
               © AB Plus Ventures 2025
             </div>
           </div>
