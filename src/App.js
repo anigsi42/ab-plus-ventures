@@ -373,24 +373,47 @@ const ABPlusVentures = () => {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-            {[
-              { num: "01", title: "Conviction", desc: "We move with deep conviction at the intersection of exponential technologies and inevitable markets.", color: "violet" },
-              { num: "02", title: "Creation", desc: "We build with precision, iterating rapidly where the curves steepen and acceleration compounds.", color: "purple" },
-              { num: "03", title: "Capital", desc: "We activate resources strategically, amplifying momentum at the critical inflection points.", color: "pink" }
-            ].map((item, idx) => (
-              <div key={idx} className="group relative">
-                <div className={`absolute inset-0 bg-gradient-to-br from-${item.color}-600/10 to-transparent rounded-3xl opacity-0 group-hover:opacity-100 transition-all duration-500 blur-xl`} />
-                <div className={`relative p-8 sm:p-10 bg-gradient-to-br from-${item.color}-950/30 to-black/50 backdrop-blur-xl border border-white/5 rounded-3xl hover:border-${item.color}-500/30 transition-all duration-500 hover:shadow-2xl hover:shadow-${item.color}-500/20 hover:-translate-y-2`}>
-                  <div className={`text-6xl sm:text-8xl font-extralight text-${item.color}-500/20 mb-6 sm:mb-8 group-hover:text-${item.color}-500/40 transition-colors`}>
-                    {item.num}
-                  </div>
-                  <h3 className="text-2xl sm:text-3xl font-light mb-4 sm:mb-5">{item.title}</h3>
-                  <p className="text-white/50 font-light leading-relaxed text-base sm:text-lg">
-                    {item.desc}
-                  </p>
+            {/* Conviction Card */}
+            <div className="group relative">
+              <div className="absolute inset-0 bg-gradient-to-br from-violet-600/10 to-transparent rounded-3xl opacity-0 group-hover:opacity-100 transition-all duration-500 blur-xl" />
+              <div className="relative p-8 sm:p-10 bg-gradient-to-br from-violet-950/30 to-black/50 backdrop-blur-xl border border-white/5 rounded-3xl hover:border-violet-500/30 transition-all duration-500 hover:shadow-2xl hover:shadow-violet-500/20 hover:-translate-y-2">
+                <div className="text-6xl sm:text-8xl font-extralight text-violet-500/20 mb-6 sm:mb-8 group-hover:text-violet-500/40 transition-colors">
+                  01
                 </div>
+                <h3 className="text-2xl sm:text-3xl font-light mb-4 sm:mb-5">Conviction</h3>
+                <p className="text-white/50 font-light leading-relaxed text-base sm:text-lg">
+                  We move with deep conviction at the intersection of exponential technologies and inevitable markets.
+                </p>
               </div>
-            ))}
+            </div>
+
+            {/* Creation Card */}
+            <div className="group relative">
+              <div className="absolute inset-0 bg-gradient-to-br from-purple-600/10 to-transparent rounded-3xl opacity-0 group-hover:opacity-100 transition-all duration-500 blur-xl" />
+              <div className="relative p-8 sm:p-10 bg-gradient-to-br from-purple-950/30 to-black/50 backdrop-blur-xl border border-white/5 rounded-3xl hover:border-purple-500/30 transition-all duration-500 hover:shadow-2xl hover:shadow-purple-500/20 hover:-translate-y-2">
+                <div className="text-6xl sm:text-8xl font-extralight text-purple-500/20 mb-6 sm:mb-8 group-hover:text-purple-500/40 transition-colors">
+                  02
+                </div>
+                <h3 className="text-2xl sm:text-3xl font-light mb-4 sm:mb-5">Creation</h3>
+                <p className="text-white/50 font-light leading-relaxed text-base sm:text-lg">
+                  We build with precision, iterating rapidly where the curves steepen and acceleration compounds.
+                </p>
+              </div>
+            </div>
+
+            {/* Capital Card */}
+            <div className="group relative">
+              <div className="absolute inset-0 bg-gradient-to-br from-pink-600/10 to-transparent rounded-3xl opacity-0 group-hover:opacity-100 transition-all duration-500 blur-xl" />
+              <div className="relative p-8 sm:p-10 bg-gradient-to-br from-pink-950/30 to-black/50 backdrop-blur-xl border border-white/5 rounded-3xl hover:border-pink-500/30 transition-all duration-500 hover:shadow-2xl hover:shadow-pink-500/20 hover:-translate-y-2">
+                <div className="text-6xl sm:text-8xl font-extralight text-pink-500/20 mb-6 sm:mb-8 group-hover:text-pink-500/40 transition-colors">
+                  03
+                </div>
+                <h3 className="text-2xl sm:text-3xl font-light mb-4 sm:mb-5">Capital</h3>
+                <p className="text-white/50 font-light leading-relaxed text-base sm:text-lg">
+                  We activate resources strategically, amplifying momentum at the critical inflection points.
+                </p>
+              </div>
+            </div>
           </div>
         </div>
       </section>
