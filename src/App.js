@@ -6,13 +6,30 @@ const ABPlusVentures = () => {
   const [activeSection, setActiveSection] = useState('hero');
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [sectionProgress, setSectionProgress] = useState({});
   const canvasRef = useRef(null);
 
   useEffect(() => {
     const handleScroll = () => {
       setScrollY(window.scrollY);
       
+      // Calculate section progress for parallax effects
       const sections = ['hero', 'thesis', 'how', 'focus', 'ventures', 'principles', 'insights', 'contact'];
+      const newProgress = {};
+      
+      sections.forEach(section => {
+        const element = document.getElementById(section);
+        if (element) {
+          const rect = element.getBoundingClientRect();
+          const elementTop = rect.top;
+          const elementHeight = rect.height;
+          const progress = Math.max(0, Math.min(1, (window.innerHeight - elementTop) / (window.innerHeight + elementHeight)));
+          newProgress[section] = progress;
+        }
+      });
+      
+      setSectionProgress(newProgress);
+      
       const current = sections.find(section => {
         const element = document.getElementById(section);
         if (element) {
@@ -30,12 +47,12 @@ const ABPlusVentures = () => {
 
     window.addEventListener('scroll', handleScroll);
     window.addEventListener('mousemove', handleMouseMove);
+    handleScroll(); // Initial call
     return () => {
       window.removeEventListener('scroll', handleScroll);
       window.removeEventListener('mousemove', handleMouseMove);
     };
   }, []);
-    };
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -46,7 +63,7 @@ const ABPlusVentures = () => {
     canvas.height = window.innerHeight * 1.2;
 
     const particles = [];
-    const particleCount = window.innerWidth < 768 ? 60 : 120; // Fewer particles on mobile
+    const particleCount = window.innerWidth < 768 ? 60 : 120;
 
     class Particle {
       constructor() {
@@ -220,7 +237,7 @@ const ABPlusVentures = () => {
         
         /* Parallax and scroll animations */
         .parallax-text {
-          transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.5s ease;
+          transition: transform 0.1s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
         .fade-in-up {
           animation: fadeInUp 1s ease-out forwards;
@@ -236,6 +253,81 @@ const ABPlusVentures = () => {
           }
         }
       `}</style>
+
+      {/* Floating Geometric Shapes - Fixed Position */}
+      <div style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        width: '100%',
+        height: '100%',
+        pointerEvents: 'none',
+        zIndex: 1,
+        overflow: 'hidden',
+      }}>
+        {/* Large circle - top right */}
+        <div style={{
+          position: 'absolute',
+          top: '15%',
+          right: '8%',
+          width: '500px',
+          height: '500px',
+          borderRadius: '50%',
+          border: '1px solid rgba(124, 58, 237, 0.12)',
+          transform: `translate(${scrollY * -0.15}px, ${scrollY * 0.08}px)`,
+          transition: 'transform 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+        }} />
+        
+        {/* Medium square - left side */}
+        <div style={{
+          position: 'absolute',
+          top: '35%',
+          left: '5%',
+          width: '300px',
+          height: '300px',
+          border: '1px solid rgba(139, 92, 246, 0.08)',
+          transform: `translate(${scrollY * 0.1}px, ${scrollY * -0.12}px) rotate(${scrollY * 0.02}deg)`,
+          transition: 'transform 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+        }} />
+        
+        {/* Small circle - bottom left */}
+        <div style={{
+          position: 'absolute',
+          bottom: '20%',
+          left: '12%',
+          width: '200px',
+          height: '200px',
+          borderRadius: '50%',
+          border: '1px solid rgba(167, 139, 250, 0.1)',
+          transform: `translate(${scrollY * -0.08}px, ${scrollY * 0.15}px)`,
+          transition: 'transform 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+        }} />
+        
+        {/* Medium circle - right middle */}
+        <div style={{
+          position: 'absolute',
+          top: '55%',
+          right: '10%',
+          width: '250px',
+          height: '250px',
+          borderRadius: '50%',
+          border: '1px solid rgba(124, 58, 237, 0.06)',
+          transform: `translate(${scrollY * 0.12}px, ${scrollY * -0.1}px)`,
+          transition: 'transform 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+        }} />
+
+        {/* Small square - top left */}
+        <div style={{
+          position: 'absolute',
+          top: '25%',
+          left: '18%',
+          width: '150px',
+          height: '150px',
+          border: '1px solid rgba(139, 92, 246, 0.07)',
+          transform: `translate(${scrollY * -0.06}px, ${scrollY * 0.09}px) rotate(${-scrollY * 0.015}deg)`,
+          transition: 'transform 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+        }} />
+      </div>
 
       {/* Navigation */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-black/40 backdrop-blur-3xl border-b border-white/5">
@@ -297,13 +389,14 @@ const ABPlusVentures = () => {
 
       {/* Hero */}
       <section id="hero" className="min-h-screen flex items-center justify-center relative overflow-hidden px-4 sm:px-6 pt-20 sm:pt-24">
-        <canvas ref={canvasRef} className="absolute inset-0" />
+        <canvas ref={canvasRef} className="absolute inset-0" style={{ zIndex: 0 }} />
         
         <div 
           className="absolute w-[400px] sm:w-[600px] lg:w-[800px] h-[400px] sm:h-[600px] lg:h-[800px] rounded-full blur-3xl opacity-20 bg-gradient-to-r from-violet-600 to-purple-600 animate-pulse-glow"
           style={{
             top: '20%',
             left: '10%',
+            zIndex: 0,
             transform: `translate(${(mousePosition.x - window.innerWidth / 2) * 0.03}px, ${(mousePosition.y - window.innerHeight / 2) * 0.03}px)`
           }}
         />
@@ -312,12 +405,13 @@ const ABPlusVentures = () => {
           style={{
             bottom: '20%',
             right: '10%',
+            zIndex: 0,
             animationDelay: '1.5s',
             transform: `translate(${-(mousePosition.x - window.innerWidth / 2) * 0.02}px, ${-(mousePosition.y - window.innerHeight / 2) * 0.02}px)`
           }}
         />
 
-        <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-5">
+        <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-5" style={{ zIndex: 0 }}>
           <div className="hidden sm:block absolute top-20 left-10 text-[8rem] lg:text-[12rem] font-extralight animate-float" style={{ animationDelay: '0s' }}>α</div>
           <div className="hidden sm:block absolute top-1/3 right-20 text-[6rem] lg:text-[10rem] font-extralight animate-float" style={{ animationDelay: '1s' }}>β</div>
           <div className="hidden sm:block absolute bottom-20 left-1/4 text-[5rem] lg:text-[8rem] font-extralight animate-float" style={{ animationDelay: '2s' }}>γ</div>
@@ -326,14 +420,32 @@ const ABPlusVentures = () => {
 
         <div className="max-w-6xl mx-auto text-center relative z-10">
           <div className="mb-8 sm:mb-12">
-            <h1 className="text-5xl sm:text-6xl lg:text-7xl xl:text-8xl font-extralight tracking-tighter mb-4 sm:mb-6 leading-none bg-gradient-to-r from-white via-violet-200 to-cyan-200 bg-clip-text text-transparent">
+            <h1 
+              className="text-5xl sm:text-6xl lg:text-7xl xl:text-8xl font-extralight tracking-tighter mb-4 sm:mb-6 leading-none bg-gradient-to-r from-white via-violet-200 to-cyan-200 bg-clip-text text-transparent parallax-text"
+              style={{
+                transform: `translateY(${scrollY * 0.15}px)`,
+                opacity: Math.max(0.3, 1 - scrollY / 800)
+              }}
+            >
               AB Plus Ventures
             </h1>
-            <div className="text-xl sm:text-2xl lg:text-3xl text-white/70 font-extralight italic tracking-wide">
+            <div 
+              className="text-xl sm:text-2xl lg:text-3xl text-white/70 font-extralight italic tracking-wide parallax-text"
+              style={{
+                transform: `translateY(${scrollY * 0.2}px)`,
+                opacity: Math.max(0.2, 1 - scrollY / 700)
+              }}
+            >
               Lean. Exponential. Inevitable.
             </div>
             
-            <div className="mt-6 sm:mt-8 flex items-center justify-center gap-2 sm:gap-4 text-base sm:text-lg text-white/30 font-extralight">
+            <div 
+              className="mt-6 sm:mt-8 flex items-center justify-center gap-2 sm:gap-4 text-base sm:text-lg text-white/30 font-extralight parallax-text"
+              style={{
+                transform: `translateY(${scrollY * 0.25}px)`,
+                opacity: Math.max(0.1, 1 - scrollY / 600)
+              }}
+            >
               <span className="text-violet-400">α</span>
               <span>→</span>
               <span className="text-purple-400">β</span>
@@ -347,13 +459,23 @@ const ABPlusVentures = () => {
             </div>
           </div>
           
-          <p className="text-lg sm:text-xl lg:text-2xl text-white/60 leading-relaxed max-w-5xl mx-auto font-light px-4">
+          <p 
+            className="text-lg sm:text-xl lg:text-2xl text-white/60 leading-relaxed max-w-5xl mx-auto font-light px-4 parallax-text"
+            style={{
+              transform: `translateY(${scrollY * 0.3}px)`,
+              opacity: Math.max(0.2, 1 - scrollY / 650)
+            }}
+          >
             "We believe the next greatest ventures won't be built by massive institutions or armies of people — they'll be created by solo founders and lean teams, moving with precision at the edge of exponential technologies. AB Plus Ventures partners deeply at this frontier: building, advising, and accelerating the companies shaping the singularity."
           </p>
 
           <button 
             onClick={() => scrollToSection('thesis')}
-            className="mt-12 sm:mt-20 inline-flex items-center gap-3 px-8 sm:px-10 py-4 sm:py-5 bg-gradient-to-r from-violet-600 to-purple-600 text-white rounded-full hover:shadow-2xl hover:shadow-violet-500/50 transition-all hover:gap-4 font-light text-base sm:text-lg"
+            className="mt-12 sm:mt-20 inline-flex items-center gap-3 px-8 sm:px-10 py-4 sm:py-5 bg-gradient-to-r from-violet-600 to-purple-600 text-white rounded-full hover:shadow-2xl hover:shadow-violet-500/50 transition-all hover:gap-4 font-light text-base sm:text-lg parallax-text"
+            style={{
+              transform: `translateY(${scrollY * 0.35}px)`,
+              opacity: Math.max(0, 1 - scrollY / 550)
+            }}
           >
             Explore Our Thesis
             <ArrowRight size={20} />
@@ -365,6 +487,9 @@ const ABPlusVentures = () => {
           onClick={() => scrollToSection('thesis')}
           className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center cursor-pointer group z-10"
           aria-label="Scroll down"
+          style={{
+            opacity: Math.max(0, 1 - scrollY / 400)
+          }}
         >
           <div className="w-6 h-10 border-2 border-white/30 rounded-full flex items-start justify-center p-2 group-hover:border-white/50 transition-colors">
             <div className="w-1.5 h-1.5 bg-violet-400 rounded-full animate-bounce-slow"></div>
@@ -464,18 +589,38 @@ const ABPlusVentures = () => {
         <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-purple-500/30 to-transparent"></div>
 
         <div className="max-w-7xl mx-auto relative z-10">
-          <div className="text-xs tracking-[0.3em] sm:tracking-[0.5em] text-purple-400/60 uppercase mb-6 sm:mb-8 font-light">How We Work</div>
+          <div 
+            className="text-xs tracking-[0.3em] sm:tracking-[0.5em] text-purple-400/60 uppercase mb-6 sm:mb-8 font-light parallax-text"
+            style={{
+              transform: `translateY(${(sectionProgress.how || 0) * -20}px)`,
+              opacity: Math.max(0.3, 1 - (sectionProgress.how || 0) * 0.5)
+            }}
+          >
+            How We Work
+          </div>
           
           <div className="relative pl-8 sm:pl-12 mb-16 sm:mb-24">
             <div className="absolute left-0 top-0 bottom-0 w-0.5 bg-gradient-to-b from-purple-500 via-pink-500 to-transparent" />
-            <p className="text-xl sm:text-2xl lg:text-3xl text-white/50 italic font-extralight leading-relaxed">
+            <p 
+              className="text-xl sm:text-2xl lg:text-3xl text-white/50 italic font-extralight leading-relaxed parallax-text"
+              style={{
+                transform: `translateY(${(sectionProgress.how || 0) * -15}px)`,
+                opacity: Math.max(0.4, 1 - (sectionProgress.how || 0) * 0.5)
+              }}
+            >
               "Embedded partnership. Precision at the critical edge. Every venture is unique."
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
             {/* Conviction Card */}
-            <div className="group relative">
+            <div 
+              className="group relative parallax-text"
+              style={{
+                transform: `translateY(${(sectionProgress.how || 0) * -10}px)`,
+                opacity: Math.max(0.5, 1 - (sectionProgress.how || 0) * 0.6)
+              }}
+            >
               <div className="absolute inset-0 bg-gradient-to-br from-violet-600/10 to-transparent rounded-3xl opacity-0 group-hover:opacity-100 transition-all duration-500 blur-xl" />
               <div className="relative p-8 sm:p-10 bg-gradient-to-br from-violet-950/30 to-black/50 backdrop-blur-xl border border-white/5 rounded-3xl hover:border-violet-500/30 transition-all duration-500 hover:shadow-2xl hover:shadow-violet-500/20 hover:-translate-y-2">
                 <div className="text-6xl sm:text-8xl font-extralight text-violet-500/20 mb-6 sm:mb-8 group-hover:text-violet-500/40 transition-colors">
@@ -489,7 +634,13 @@ const ABPlusVentures = () => {
             </div>
 
             {/* Creation Card */}
-            <div className="group relative">
+            <div 
+              className="group relative parallax-text"
+              style={{
+                transform: `translateY(${(sectionProgress.how || 0) * -12}px)`,
+                opacity: Math.max(0.5, 1 - (sectionProgress.how || 0) * 0.6)
+              }}
+            >
               <div className="absolute inset-0 bg-gradient-to-br from-purple-600/10 to-transparent rounded-3xl opacity-0 group-hover:opacity-100 transition-all duration-500 blur-xl" />
               <div className="relative p-8 sm:p-10 bg-gradient-to-br from-purple-950/30 to-black/50 backdrop-blur-xl border border-white/5 rounded-3xl hover:border-purple-500/30 transition-all duration-500 hover:shadow-2xl hover:shadow-purple-500/20 hover:-translate-y-2">
                 <div className="text-6xl sm:text-8xl font-extralight text-purple-500/20 mb-6 sm:mb-8 group-hover:text-purple-500/40 transition-colors">
@@ -503,7 +654,13 @@ const ABPlusVentures = () => {
             </div>
 
             {/* Capital Card */}
-            <div className="group relative">
+            <div 
+              className="group relative parallax-text"
+              style={{
+                transform: `translateY(${(sectionProgress.how || 0) * -14}px)`,
+                opacity: Math.max(0.5, 1 - (sectionProgress.how || 0) * 0.6)
+              }}
+            >
               <div className="absolute inset-0 bg-gradient-to-br from-pink-600/10 to-transparent rounded-3xl opacity-0 group-hover:opacity-100 transition-all duration-500 blur-xl" />
               <div className="relative p-8 sm:p-10 bg-gradient-to-br from-pink-950/30 to-black/50 backdrop-blur-xl border border-white/5 rounded-3xl hover:border-pink-500/30 transition-all duration-500 hover:shadow-2xl hover:shadow-pink-500/20 hover:-translate-y-2">
                 <div className="text-6xl sm:text-8xl font-extralight text-pink-500/20 mb-6 sm:mb-8 group-hover:text-pink-500/40 transition-colors">
@@ -544,7 +701,8 @@ const ABPlusVentures = () => {
             style={{
               backgroundImage: `linear-gradient(rgba(16, 185, 129, 0.3) 1px, transparent 1px), linear-gradient(90deg, rgba(16, 185, 129, 0.3) 1px, transparent 1px)`,
               backgroundSize: '50px 50px',
-              transform: `translateY(${scrollY * 0.05}px)`
+              transform: `translate(${scrollY * 0.05}px, ${scrollY * 0.03}px)`,
+              transition: 'transform 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94)'
             }}
           />
         </div>
@@ -575,7 +733,11 @@ const ABPlusVentures = () => {
               return (
                 <div 
                   key={index}
-                  className="group relative p-8 sm:p-10 lg:p-12 border border-white/10 rounded-3xl hover:border-white/30 transition-all duration-500 overflow-hidden backdrop-blur-sm"
+                  className="group relative p-8 sm:p-10 lg:p-12 border border-white/10 rounded-3xl hover:border-white/30 transition-all duration-500 overflow-hidden backdrop-blur-sm parallax-text"
+                  style={{
+                    transform: `translateY(${(sectionProgress.focus || 0) * -(8 + index * 2)}px)`,
+                    opacity: Math.max(0.4, 1 - (sectionProgress.focus || 0) * (0.5 + index * 0.05))
+                  }}
                 >
                   <div className={`absolute inset-0 bg-gradient-to-br ${area.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-500`}></div>
                   
@@ -606,14 +768,34 @@ const ABPlusVentures = () => {
         <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-blue-500/30 to-transparent"></div>
 
         <div className="max-w-7xl mx-auto relative z-10">
-          <div className="text-xs tracking-[0.3em] sm:tracking-[0.5em] text-blue-400/60 uppercase mb-6 sm:mb-8 font-light">Ventures</div>
-          <h2 className="text-4xl sm:text-5xl lg:text-6xl font-extralight tracking-tight mb-12 sm:mb-16">
+          <div 
+            className="text-xs tracking-[0.3em] sm:tracking-[0.5em] text-blue-400/60 uppercase mb-6 sm:mb-8 font-light parallax-text"
+            style={{
+              transform: `translateY(${(sectionProgress.ventures || 0) * -20}px)`,
+              opacity: Math.max(0.3, 1 - (sectionProgress.ventures || 0) * 0.5)
+            }}
+          >
+            Ventures
+          </div>
+          <h2 
+            className="text-4xl sm:text-5xl lg:text-6xl font-extralight tracking-tight mb-12 sm:mb-16 parallax-text"
+            style={{
+              transform: `translateY(${(sectionProgress.ventures || 0) * -25}px)`,
+              opacity: Math.max(0.5, 1 - (sectionProgress.ventures || 0) * 0.4)
+            }}
+          >
             Where the future takes form.
           </h2>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
             {/* AI-Native Infrastructure */}
-            <div className="group relative h-80 sm:h-96 rounded-3xl overflow-hidden border border-white/10 hover:border-white/20 transition-all">
+            <div 
+              className="group relative h-80 sm:h-96 rounded-3xl overflow-hidden border border-white/10 hover:border-white/20 transition-all parallax-text"
+              style={{
+                transform: `translateY(${(sectionProgress.ventures || 0) * -15}px)`,
+                opacity: Math.max(0.5, 1 - (sectionProgress.ventures || 0) * 0.6)
+              }}
+            >
               <div className="absolute inset-0 bg-gradient-to-br from-violet-950/50 via-purple-950/30 to-black" />
               <svg className="absolute inset-0 w-full h-full opacity-20" xmlns="http://www.w3.org/2000/svg">
                 <defs>
@@ -651,7 +833,13 @@ const ABPlusVentures = () => {
             </div>
 
             {/* Programmable Biology */}
-            <div className="group relative h-80 sm:h-96 rounded-3xl overflow-hidden border border-white/10 hover:border-white/20 transition-all">
+            <div 
+              className="group relative h-80 sm:h-96 rounded-3xl overflow-hidden border border-white/10 hover:border-white/20 transition-all parallax-text"
+              style={{
+                transform: `translateY(${(sectionProgress.ventures || 0) * -18}px)`,
+                opacity: Math.max(0.5, 1 - (sectionProgress.ventures || 0) * 0.6)
+              }}
+            >
               <div className="absolute inset-0 bg-gradient-to-br from-emerald-950/50 via-teal-950/30 to-black" />
               <svg className="absolute inset-0 w-full h-full opacity-20" xmlns="http://www.w3.org/2000/svg">
                 <defs>
@@ -686,7 +874,13 @@ const ABPlusVentures = () => {
             </div>
 
             {/* New Signals of Value */}
-            <div className="group relative h-80 sm:h-96 rounded-3xl overflow-hidden border border-white/10 hover:border-white/20 transition-all lg:col-span-2">
+            <div 
+              className="group relative h-80 sm:h-96 rounded-3xl overflow-hidden border border-white/10 hover:border-white/20 transition-all lg:col-span-2 parallax-text"
+              style={{
+                transform: `translateY(${(sectionProgress.ventures || 0) * -20}px)`,
+                opacity: Math.max(0.5, 1 - (sectionProgress.ventures || 0) * 0.6)
+              }}
+            >
               <div className="absolute inset-0 bg-gradient-to-br from-blue-950/50 via-cyan-950/30 to-black" />
               <svg className="absolute inset-0 w-full h-full opacity-20" xmlns="http://www.w3.org/2000/svg">
                 <defs>
@@ -731,8 +925,22 @@ const ABPlusVentures = () => {
         <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-rose-500/30 to-transparent"></div>
 
         <div className="max-w-7xl mx-auto relative z-10">
-          <div className="text-xs tracking-[0.3em] sm:tracking-[0.5em] text-rose-400/60 uppercase mb-6 sm:mb-8 font-light">Principles</div>
-          <h2 className="text-4xl sm:text-6xl lg:text-7xl font-extralight tracking-tight mb-12 sm:mb-20 bg-gradient-to-r from-white to-rose-200 bg-clip-text text-transparent">
+          <div 
+            className="text-xs tracking-[0.3em] sm:tracking-[0.5em] text-rose-400/60 uppercase mb-6 sm:mb-8 font-light parallax-text"
+            style={{
+              transform: `translateY(${(sectionProgress.principles || 0) * -20}px)`,
+              opacity: Math.max(0.3, 1 - (sectionProgress.principles || 0) * 0.5)
+            }}
+          >
+            Principles
+          </div>
+          <h2 
+            className="text-4xl sm:text-6xl lg:text-7xl font-extralight tracking-tight mb-12 sm:mb-20 bg-gradient-to-r from-white to-rose-200 bg-clip-text text-transparent parallax-text"
+            style={{
+              transform: `translateY(${(sectionProgress.principles || 0) * -25}px)`,
+              opacity: Math.max(0.5, 1 - (sectionProgress.principles || 0) * 0.4)
+            }}
+          >
             How we operate.
           </h2>
 
@@ -748,7 +956,11 @@ const ABPlusVentures = () => {
             ].map((principle, index) => (
               <div 
                 key={index} 
-                className="group relative p-6 sm:p-8 bg-gradient-to-br from-white/5 to-transparent border border-white/10 rounded-2xl hover:border-rose-500/30 hover:bg-white/10 transition-all duration-500 hover:-translate-y-1"
+                className="group relative p-6 sm:p-8 bg-gradient-to-br from-white/5 to-transparent border border-white/10 rounded-2xl hover:border-rose-500/30 hover:bg-white/10 transition-all duration-500 hover:-translate-y-1 parallax-text"
+                style={{
+                  transform: `translateY(${(sectionProgress.principles || 0) * -(8 + index * 1.5)}px)`,
+                  opacity: Math.max(0.4, 1 - (sectionProgress.principles || 0) * (0.5 + index * 0.04))
+                }}
               >
                 <div className="absolute inset-0 bg-gradient-to-br from-rose-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl" />
                 <div className="relative z-10">
@@ -779,11 +991,31 @@ const ABPlusVentures = () => {
         <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-cyan-500/30 to-transparent"></div>
 
         <div className="max-w-6xl mx-auto relative z-10">
-          <div className="text-xs tracking-[0.3em] sm:tracking-[0.4em] text-white/40 uppercase mb-6 sm:mb-8 font-light">Insights</div>
-          <h2 className="text-4xl sm:text-5xl lg:text-6xl font-extralight tracking-tight mb-6 sm:mb-8">
+          <div 
+            className="text-xs tracking-[0.3em] sm:tracking-[0.4em] text-white/40 uppercase mb-6 sm:mb-8 font-light parallax-text"
+            style={{
+              transform: `translateY(${(sectionProgress.insights || 0) * -20}px)`,
+              opacity: Math.max(0.3, 1 - (sectionProgress.insights || 0) * 0.5)
+            }}
+          >
+            Insights
+          </div>
+          <h2 
+            className="text-4xl sm:text-5xl lg:text-6xl font-extralight tracking-tight mb-6 sm:mb-8 parallax-text"
+            style={{
+              transform: `translateY(${(sectionProgress.insights || 0) * -25}px)`,
+              opacity: Math.max(0.5, 1 - (sectionProgress.insights || 0) * 0.4)
+            }}
+          >
             Frontier Insights
           </h2>
-          <p className="text-lg sm:text-xl text-white/60 font-light mb-12 sm:mb-16 max-w-3xl">
+          <p 
+            className="text-lg sm:text-xl text-white/60 font-light mb-12 sm:mb-16 max-w-3xl parallax-text"
+            style={{
+              transform: `translateY(${(sectionProgress.insights || 0) * -15}px)`,
+              opacity: Math.max(0.6, 1 - (sectionProgress.insights || 0) * 0.6)
+            }}
+          >
             Stay ahead of the curves reshaping intelligence, biology, and the frontier economy. Weekly perspectives, delivered simply.
           </p>
 
@@ -815,17 +1047,41 @@ const ABPlusVentures = () => {
         <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-purple-500/30 to-transparent"></div>
 
         <div className="max-w-6xl mx-auto text-center relative z-10">
-          <div className="text-xs tracking-[0.3em] sm:tracking-[0.5em] text-purple-400/60 uppercase mb-6 sm:mb-8 font-light">Contact</div>
-          <h2 className="text-4xl sm:text-6xl lg:text-7xl font-extralight tracking-tight mb-8 sm:mb-12 bg-gradient-to-r from-white to-purple-200 bg-clip-text text-transparent">
+          <div 
+            className="text-xs tracking-[0.3em] sm:tracking-[0.5em] text-purple-400/60 uppercase mb-6 sm:mb-8 font-light parallax-text"
+            style={{
+              transform: `translateY(${(sectionProgress.contact || 0) * -20}px)`,
+              opacity: Math.max(0.3, 1 - (sectionProgress.contact || 0) * 0.5)
+            }}
+          >
+            Contact
+          </div>
+          <h2 
+            className="text-4xl sm:text-6xl lg:text-7xl font-extralight tracking-tight mb-8 sm:mb-12 bg-gradient-to-r from-white to-purple-200 bg-clip-text text-transparent parallax-text"
+            style={{
+              transform: `translateY(${(sectionProgress.contact || 0) * -25}px)`,
+              opacity: Math.max(0.5, 1 - (sectionProgress.contact || 0) * 0.4)
+            }}
+          >
             Building at the edge?
           </h2>
-          <p className="text-lg sm:text-xl lg:text-2xl text-white/60 font-light mb-12 sm:mb-20 max-w-3xl mx-auto leading-relaxed">
+          <p 
+            className="text-lg sm:text-xl lg:text-2xl text-white/60 font-light mb-12 sm:mb-20 max-w-3xl mx-auto leading-relaxed parallax-text"
+            style={{
+              transform: `translateY(${(sectionProgress.contact || 0) * -15}px)`,
+              opacity: Math.max(0.6, 1 - (sectionProgress.contact || 0) * 0.6)
+            }}
+          >
             Are you building solo? In stealth? With a lean team at the edge? We want to hear from you.
           </p>
           
           <a 
             href="mailto:anitha@abplusventures.com"
-            className="px-10 sm:px-14 py-4 sm:py-6 bg-gradient-to-r from-violet-600 to-purple-600 text-white rounded-full hover:shadow-2xl hover:shadow-purple-500/50 transition-all text-lg sm:text-xl font-light hover:scale-105 inline-block"
+            className="px-10 sm:px-14 py-4 sm:py-6 bg-gradient-to-r from-violet-600 to-purple-600 text-white rounded-full hover:shadow-2xl hover:shadow-purple-500/50 transition-all text-lg sm:text-xl font-light hover:scale-105 inline-block parallax-text"
+            style={{
+              transform: `translateY(${(sectionProgress.contact || 0) * -10}px)`,
+              opacity: Math.max(0.7, 1 - (sectionProgress.contact || 0) * 0.5)
+            }}
           >
             Get in Touch
           </a>
