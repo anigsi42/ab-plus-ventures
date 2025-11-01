@@ -828,6 +828,9 @@ const ABPlusVentures = () => {
                   <span className="px-4 sm:px-6 py-1.5 sm:py-2 bg-white/10 backdrop-blur-sm text-white rounded-full text-xs sm:text-sm font-light border border-white/20 hover:bg-white/20 transition-colors cursor-pointer">
                     Sequence Sync
                   </span>
+                  <span className="px-4 sm:px-6 py-1.5 sm:py-2 bg-white/10 backdrop-blur-sm text-white rounded-full text-xs sm:text-sm font-light border border-white/20 hover:bg-white/20 transition-colors cursor-pointer">
+                    MetaLife AI
+                  </span>
                 </div>
               </div>
             </div>
@@ -869,6 +872,9 @@ const ABPlusVentures = () => {
                   <span className="px-4 sm:px-6 py-1.5 sm:py-2 bg-white/10 backdrop-blur-sm text-white rounded-full text-xs sm:text-sm font-light border border-white/20 hover:bg-white/20 transition-colors cursor-pointer">
                     CellSight AI
                   </span>
+                  <span className="px-4 sm:px-6 py-1.5 sm:py-2 bg-white/10 backdrop-blur-sm text-white rounded-full text-xs sm:text-sm font-light border border-white/20 hover:bg-white/20 transition-colors cursor-pointer">
+                    LucaSci
+                  </span>
                 </div>
               </div>
             </div>
@@ -909,6 +915,12 @@ const ABPlusVentures = () => {
                   </span>
                   <span className="px-4 sm:px-6 py-1.5 sm:py-2 bg-white/10 backdrop-blur-sm text-white rounded-full text-xs sm:text-sm font-light border border-white/20 hover:bg-white/20 transition-colors cursor-pointer">
                     Nexus IP
+                  </span>
+                  <span className="px-4 sm:px-6 py-1.5 sm:py-2 bg-white/10 backdrop-blur-sm text-white rounded-full text-xs sm:text-sm font-light border border-white/20 hover:bg-white/20 transition-colors cursor-pointer">
+                    GROW AI
+                  </span>
+                  <span className="px-4 sm:px-6 py-1.5 sm:py-2 bg-white/10 backdrop-blur-sm text-white rounded-full text-xs sm:text-sm font-light border border-white/20 hover:bg-white/20 transition-colors cursor-pointer">
+                    Skoar AI
                   </span>
                 </div>
               </div>
