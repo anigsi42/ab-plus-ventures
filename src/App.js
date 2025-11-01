@@ -812,8 +812,8 @@ const ABPlusVentures = () => {
           <div 
             className="text-xs tracking-[0.3em] sm:tracking-[0.5em] text-blue-400/60 uppercase mb-6 sm:mb-8 font-light parallax-text"
             style={{
-              transform: `translateY(${(sectionProgress.ventures || 0) * -20}px)`,
-              opacity: Math.max(0.3, 1 - (sectionProgress.ventures || 0) * 0.5)
+              transform: `translateY(${(sectionProgress.ventures || 0) * -50}px)`,
+              opacity: Math.max(0.2, 1 - (sectionProgress.ventures || 0) * 0.8)
             }}
           >
             Ventures
@@ -821,8 +821,8 @@ const ABPlusVentures = () => {
           <h2 
             className="text-4xl sm:text-5xl lg:text-6xl font-extralight tracking-tight mb-12 sm:mb-16 parallax-text"
             style={{
-              transform: `translateY(${(sectionProgress.ventures || 0) * -25}px)`,
-              opacity: Math.max(0.5, 1 - (sectionProgress.ventures || 0) * 0.4)
+              transform: `translateY(${(sectionProgress.ventures || 0) * -60}px)`,
+              opacity: Math.max(0.3, 1 - (sectionProgress.ventures || 0) * 0.7)
             }}
           >
             Where the future takes form.
@@ -831,10 +831,11 @@ const ABPlusVentures = () => {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
             {/* AI-Native Infrastructure */}
             <div 
-              className="group relative h-80 sm:h-96 rounded-3xl overflow-hidden border border-white/10 hover:border-white/20 transition-all parallax-text"
+              data-card="venture-ai"
+              className={`group relative h-80 sm:h-96 rounded-3xl overflow-hidden border border-white/10 hover:border-white/20 transition-all parallax-text ${visibleCards.has('venture-ai') ? 'card-visible card-glow' : 'card-enter'}`}
               style={{
-                transform: `translateY(${(sectionProgress.ventures || 0) * -15}px)`,
-                opacity: Math.max(0.5, 1 - (sectionProgress.ventures || 0) * 0.6)
+                transform: `translateY(${(sectionProgress.ventures || 0) * -40}px)`,
+                transitionDelay: '0ms'
               }}
             >
               <div className="absolute inset-0 bg-gradient-to-br from-violet-950/50 via-purple-950/30 to-black" />
