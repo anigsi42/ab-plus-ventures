@@ -799,6 +799,27 @@ const ABPlusVentures = () => {
             })}
           </div>
         </div>
+
+        {/* Scroll Indicators */}
+        <button 
+          onClick={() => scrollToSection('ventures')}
+          className="absolute bottom-8 left-1/2 -translate-x-1/2 cursor-pointer group z-10"
+          aria-label="Scroll down"
+        >
+          <div className="w-6 h-10 border-2 border-white/30 rounded-full flex items-start justify-center p-2 group-hover:border-white/50 transition-colors">
+            <div className="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-bounce-slow"></div>
+          </div>
+        </button>
+
+        <button 
+          onClick={() => scrollToSection('how')}
+          className="absolute top-8 left-1/2 -translate-x-1/2 cursor-pointer group z-10 rotate-180"
+          aria-label="Scroll up"
+        >
+          <div className="w-6 h-10 border-2 border-white/30 rounded-full flex items-start justify-center p-2 group-hover:border-white/50 transition-colors">
+            <div className="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-bounce-slow"></div>
+          </div>
+        </button>
       </section>
 
       {/* Ventures */}
@@ -879,10 +900,11 @@ const ABPlusVentures = () => {
 
             {/* Programmable Biology */}
             <div 
-              className="group relative h-80 sm:h-96 rounded-3xl overflow-hidden border border-white/10 hover:border-white/20 transition-all parallax-text"
+              data-card="venture-bio"
+              className={`group relative h-80 sm:h-96 rounded-3xl overflow-hidden border border-white/10 hover:border-white/20 transition-all parallax-text ${visibleCards.has('venture-bio') ? 'card-visible card-glow' : 'card-enter'}`}
               style={{
-                transform: `translateY(${(sectionProgress.ventures || 0) * -18}px)`,
-                opacity: Math.max(0.5, 1 - (sectionProgress.ventures || 0) * 0.6)
+                transform: `translateY(${(sectionProgress.ventures || 0) * -45}px)`,
+                transitionDelay: '150ms'
               }}
             >
               <div className="absolute inset-0 bg-gradient-to-br from-emerald-950/50 via-teal-950/30 to-black" />
@@ -923,10 +945,11 @@ const ABPlusVentures = () => {
 
             {/* New Signals of Value */}
             <div 
-              className="group relative h-80 sm:h-96 rounded-3xl overflow-hidden border border-white/10 hover:border-white/20 transition-all lg:col-span-2 parallax-text"
+              data-card="venture-markets"
+              className={`group relative h-80 sm:h-96 rounded-3xl overflow-hidden border border-white/10 hover:border-white/20 transition-all lg:col-span-2 parallax-text ${visibleCards.has('venture-markets') ? 'card-visible card-glow' : 'card-enter'}`}
               style={{
-                transform: `translateY(${(sectionProgress.ventures || 0) * -20}px)`,
-                opacity: Math.max(0.5, 1 - (sectionProgress.ventures || 0) * 0.6)
+                transform: `translateY(${(sectionProgress.ventures || 0) * -50}px)`,
+                transitionDelay: '300ms'
               }}
             >
               <div className="absolute inset-0 bg-gradient-to-br from-blue-950/50 via-cyan-950/30 to-black" />
@@ -982,8 +1005,8 @@ const ABPlusVentures = () => {
           <div 
             className="text-xs tracking-[0.3em] sm:tracking-[0.5em] text-rose-400/60 uppercase mb-6 sm:mb-8 font-light parallax-text"
             style={{
-              transform: `translateY(${(sectionProgress.principles || 0) * -20}px)`,
-              opacity: Math.max(0.3, 1 - (sectionProgress.principles || 0) * 0.5)
+              transform: `translateY(${(sectionProgress.principles || 0) * -50}px)`,
+              opacity: Math.max(0.2, 1 - (sectionProgress.principles || 0) * 0.8)
             }}
           >
             Principles
@@ -991,8 +1014,8 @@ const ABPlusVentures = () => {
           <h2 
             className="text-4xl sm:text-6xl lg:text-7xl font-extralight tracking-tight mb-12 sm:mb-20 bg-gradient-to-r from-white to-rose-200 bg-clip-text text-transparent parallax-text"
             style={{
-              transform: `translateY(${(sectionProgress.principles || 0) * -25}px)`,
-              opacity: Math.max(0.5, 1 - (sectionProgress.principles || 0) * 0.4)
+              transform: `translateY(${(sectionProgress.principles || 0) * -60}px)`,
+              opacity: Math.max(0.3, 1 - (sectionProgress.principles || 0) * 0.7)
             }}
           >
             How we operate.
@@ -1010,10 +1033,11 @@ const ABPlusVentures = () => {
             ].map((principle, index) => (
               <div 
                 key={index} 
-                className="group relative p-6 sm:p-8 bg-gradient-to-br from-white/5 to-transparent border border-white/10 rounded-2xl hover:border-rose-500/30 hover:bg-white/10 transition-all duration-500 hover:-translate-y-1 parallax-text"
+                data-card={`principle-${index}`}
+                className={`group relative p-6 sm:p-8 bg-gradient-to-br from-white/5 to-transparent border border-white/10 rounded-2xl hover:border-rose-500/30 hover:bg-white/10 transition-all duration-500 hover:-translate-y-1 parallax-text ${visibleCards.has(`principle-${index}`) ? 'card-visible card-glow' : 'card-enter'}`}
                 style={{
-                  transform: `translateY(${(sectionProgress.principles || 0) * -(8 + index * 1.5)}px)`,
-                  opacity: Math.max(0.4, 1 - (sectionProgress.principles || 0) * (0.5 + index * 0.04))
+                  transform: `translateY(${(sectionProgress.principles || 0) * -(20 + index * 5)}px)`,
+                  transitionDelay: `${index * 80}ms`
                 }}
               >
                 <div className="absolute inset-0 bg-gradient-to-br from-rose-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl" />
@@ -1048,8 +1072,8 @@ const ABPlusVentures = () => {
           <div 
             className="text-xs tracking-[0.3em] sm:tracking-[0.4em] text-white/40 uppercase mb-6 sm:mb-8 font-light parallax-text"
             style={{
-              transform: `translateY(${(sectionProgress.insights || 0) * -20}px)`,
-              opacity: Math.max(0.3, 1 - (sectionProgress.insights || 0) * 0.5)
+              transform: `translateY(${(sectionProgress.insights || 0) * -50}px)`,
+              opacity: Math.max(0.2, 1 - (sectionProgress.insights || 0) * 0.8)
             }}
           >
             Insights
@@ -1057,8 +1081,8 @@ const ABPlusVentures = () => {
           <h2 
             className="text-4xl sm:text-5xl lg:text-6xl font-extralight tracking-tight mb-6 sm:mb-8 parallax-text"
             style={{
-              transform: `translateY(${(sectionProgress.insights || 0) * -25}px)`,
-              opacity: Math.max(0.5, 1 - (sectionProgress.insights || 0) * 0.4)
+              transform: `translateY(${(sectionProgress.insights || 0) * -60}px)`,
+              opacity: Math.max(0.3, 1 - (sectionProgress.insights || 0) * 0.7)
             }}
           >
             Frontier Insights
@@ -1066,8 +1090,8 @@ const ABPlusVentures = () => {
           <p 
             className="text-lg sm:text-xl text-white/60 font-light mb-12 sm:mb-16 max-w-3xl parallax-text"
             style={{
-              transform: `translateY(${(sectionProgress.insights || 0) * -15}px)`,
-              opacity: Math.max(0.6, 1 - (sectionProgress.insights || 0) * 0.6)
+              transform: `translateY(${(sectionProgress.insights || 0) * -45}px)`,
+              opacity: Math.max(0.4, 1 - (sectionProgress.insights || 0) * 0.8)
             }}
           >
             Stay ahead of the curves reshaping intelligence, biology, and the frontier economy. Weekly perspectives, delivered simply.
@@ -1104,8 +1128,8 @@ const ABPlusVentures = () => {
           <div 
             className="text-xs tracking-[0.3em] sm:tracking-[0.5em] text-purple-400/60 uppercase mb-6 sm:mb-8 font-light parallax-text"
             style={{
-              transform: `translateY(${(sectionProgress.contact || 0) * -20}px)`,
-              opacity: Math.max(0.3, 1 - (sectionProgress.contact || 0) * 0.5)
+              transform: `translateY(${(sectionProgress.contact || 0) * -50}px)`,
+              opacity: Math.max(0.2, 1 - (sectionProgress.contact || 0) * 0.8)
             }}
           >
             Contact
@@ -1113,8 +1137,8 @@ const ABPlusVentures = () => {
           <h2 
             className="text-4xl sm:text-6xl lg:text-7xl font-extralight tracking-tight mb-8 sm:mb-12 bg-gradient-to-r from-white to-purple-200 bg-clip-text text-transparent parallax-text"
             style={{
-              transform: `translateY(${(sectionProgress.contact || 0) * -25}px)`,
-              opacity: Math.max(0.5, 1 - (sectionProgress.contact || 0) * 0.4)
+              transform: `translateY(${(sectionProgress.contact || 0) * -60}px)`,
+              opacity: Math.max(0.3, 1 - (sectionProgress.contact || 0) * 0.7)
             }}
           >
             Building at the edge?
@@ -1122,8 +1146,8 @@ const ABPlusVentures = () => {
           <p 
             className="text-lg sm:text-xl lg:text-2xl text-white/60 font-light mb-12 sm:mb-20 max-w-3xl mx-auto leading-relaxed parallax-text"
             style={{
-              transform: `translateY(${(sectionProgress.contact || 0) * -15}px)`,
-              opacity: Math.max(0.6, 1 - (sectionProgress.contact || 0) * 0.6)
+              transform: `translateY(${(sectionProgress.contact || 0) * -45}px)`,
+              opacity: Math.max(0.4, 1 - (sectionProgress.contact || 0) * 0.8)
             }}
           >
             Are you building solo? In stealth? With a lean team at the edge? We want to hear from you.
@@ -1133,8 +1157,8 @@ const ABPlusVentures = () => {
             href="mailto:anitha@abplusventures.com"
             className="px-10 sm:px-14 py-4 sm:py-6 bg-gradient-to-r from-violet-600 to-purple-600 text-white rounded-full hover:shadow-2xl hover:shadow-purple-500/50 transition-all text-lg sm:text-xl font-light hover:scale-105 inline-block parallax-text"
             style={{
-              transform: `translateY(${(sectionProgress.contact || 0) * -10}px)`,
-              opacity: Math.max(0.7, 1 - (sectionProgress.contact || 0) * 0.5)
+              transform: `translateY(${(sectionProgress.contact || 0) * -30}px)`,
+              opacity: Math.max(0.5, 1 - (sectionProgress.contact || 0) * 0.7)
             }}
           >
             Get in Touch
