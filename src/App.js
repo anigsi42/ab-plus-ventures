@@ -7,6 +7,7 @@ const ABPlusVentures = () => {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [sectionProgress, setSectionProgress] = useState({});
+  const [visibleCards, setVisibleCards] = useState(new Set());
   const canvasRef = useRef(null);
 
   useEffect(() => {
@@ -39,6 +40,17 @@ const ABPlusVentures = () => {
         return false;
       });
       if (current) setActiveSection(current);
+
+      // Check for visible cards
+      const cards = document.querySelectorAll('[data-card]');
+      const newVisibleCards = new Set();
+      cards.forEach(card => {
+        const rect = card.getBoundingClientRect();
+        if (rect.top < window.innerHeight * 0.8 && rect.bottom > window.innerHeight * 0.2) {
+          newVisibleCards.add(card.dataset.card);
+        }
+      });
+      setVisibleCards(newVisibleCards);
     };
 
     const handleMouseMove = (e) => {
@@ -251,6 +263,20 @@ const ABPlusVentures = () => {
             opacity: 1;
             transform: translateY(0);
           }
+        }
+        
+        /* Card animations */
+        .card-enter {
+          opacity: 0;
+          transform: translateY(40px) scale(0.95);
+        }
+        .card-visible {
+          opacity: 1;
+          transform: translateY(0) scale(1);
+          transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .card-glow {
+          box-shadow: 0 0 30px rgba(124, 58, 237, 0.3);
         }
       `}</style>
 
@@ -520,8 +546,8 @@ const ABPlusVentures = () => {
           <div 
             className="text-xs tracking-[0.3em] sm:tracking-[0.5em] text-violet-400/60 uppercase mb-6 sm:mb-8 font-light parallax-text"
             style={{ 
-              transform: `translateY(${(sectionProgress.thesis || 0) * -20}px)`,
-              opacity: Math.max(0.3, 1 - (sectionProgress.thesis || 0) * 0.5)
+              transform: `translateY(${(sectionProgress.thesis || 0) * -50}px)`,
+              opacity: Math.max(0.2, 1 - (sectionProgress.thesis || 0) * 0.8)
             }}
           >
             Thesis
@@ -529,8 +555,8 @@ const ABPlusVentures = () => {
           <h2 
             className="text-4xl sm:text-6xl lg:text-7xl font-extralight tracking-tight mb-6 sm:mb-10 bg-gradient-to-r from-white to-violet-200 bg-clip-text text-transparent parallax-text"
             style={{ 
-              transform: `translateY(${(sectionProgress.thesis || 0) * -30}px)`,
-              opacity: Math.max(0.5, 1 - (sectionProgress.thesis || 0) * 0.3)
+              transform: `translateY(${(sectionProgress.thesis || 0) * -60}px)`,
+              opacity: Math.max(0.3, 1 - (sectionProgress.thesis || 0) * 0.6)
             }}
           >
             Lean is the new scale.
@@ -538,8 +564,8 @@ const ABPlusVentures = () => {
           <p 
             className="text-2xl sm:text-3xl lg:text-4xl text-white/70 font-extralight mb-12 sm:mb-20 parallax-text"
             style={{ 
-              transform: `translateY(${(sectionProgress.thesis || 0) * -25}px)`,
-              opacity: Math.max(0.6, 1 - (sectionProgress.thesis || 0) * 0.4)
+              transform: `translateY(${(sectionProgress.thesis || 0) * -45}px)`,
+              opacity: Math.max(0.4, 1 - (sectionProgress.thesis || 0) * 0.7)
             }}
           >
             Solo founders and sharp teams are enough to build what matters.
@@ -550,8 +576,8 @@ const ABPlusVentures = () => {
             <p 
               className="text-xl sm:text-2xl lg:text-3xl text-white/50 italic font-extralight leading-relaxed parallax-text"
               style={{ 
-                transform: `translateY(${(sectionProgress.thesis || 0) * -15}px)`,
-                opacity: Math.max(0.4, 1 - (sectionProgress.thesis || 0) * 0.5)
+                transform: `translateY(${(sectionProgress.thesis || 0) * -35}px)`,
+                opacity: Math.max(0.3, 1 - (sectionProgress.thesis || 0) * 0.8)
               }}
             >
               "History shows us: a handful of people can bend the arc of the future."
@@ -561,8 +587,8 @@ const ABPlusVentures = () => {
           <p 
             className="text-lg sm:text-xl lg:text-2xl text-white/60 leading-relaxed font-light max-w-5xl parallax-text"
             style={{ 
-              transform: `translateY(${(sectionProgress.thesis || 0) * -10}px)`,
-              opacity: Math.max(0.5, 1 - (sectionProgress.thesis || 0) * 0.6)
+              transform: `translateY(${(sectionProgress.thesis || 0) * -25}px)`,
+              opacity: Math.max(0.4, 1 - (sectionProgress.thesis || 0) * 0.9)
             }}
           >
             Our thesis is simple: when purpose and clarity meet exponential technologies, focus beats force. We operate where the curves accelerate, and the singularity shifts from theory to practice.
@@ -574,6 +600,17 @@ const ABPlusVentures = () => {
           onClick={() => scrollToSection('how')}
           className="absolute bottom-8 left-1/2 -translate-x-1/2 cursor-pointer group z-10"
           aria-label="Scroll down"
+        >
+          <div className="w-6 h-10 border-2 border-white/30 rounded-full flex items-start justify-center p-2 group-hover:border-white/50 transition-colors">
+            <div className="w-1.5 h-1.5 bg-violet-400 rounded-full animate-bounce-slow"></div>
+          </div>
+        </button>
+
+        {/* Scroll Up Indicator */}
+        <button 
+          onClick={() => scrollToSection('hero')}
+          className="absolute top-8 left-1/2 -translate-x-1/2 cursor-pointer group z-10 rotate-180"
+          aria-label="Scroll up"
         >
           <div className="w-6 h-10 border-2 border-white/30 rounded-full flex items-start justify-center p-2 group-hover:border-white/50 transition-colors">
             <div className="w-1.5 h-1.5 bg-violet-400 rounded-full animate-bounce-slow"></div>
@@ -615,10 +652,11 @@ const ABPlusVentures = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
             {/* Conviction Card */}
             <div 
-              className="group relative parallax-text"
+              data-card="conviction"
+              className={`group relative parallax-text ${visibleCards.has('conviction') ? 'card-visible card-glow' : 'card-enter'}`}
               style={{
-                transform: `translateY(${(sectionProgress.how || 0) * -10}px)`,
-                opacity: Math.max(0.5, 1 - (sectionProgress.how || 0) * 0.6)
+                transform: `translateY(${(sectionProgress.how || 0) * -30}px)`,
+                transitionDelay: '0ms'
               }}
             >
               <div className="absolute inset-0 bg-gradient-to-br from-violet-600/10 to-transparent rounded-3xl opacity-0 group-hover:opacity-100 transition-all duration-500 blur-xl" />
@@ -635,10 +673,11 @@ const ABPlusVentures = () => {
 
             {/* Creation Card */}
             <div 
-              className="group relative parallax-text"
+              data-card="creation"
+              className={`group relative parallax-text ${visibleCards.has('creation') ? 'card-visible card-glow' : 'card-enter'}`}
               style={{
-                transform: `translateY(${(sectionProgress.how || 0) * -12}px)`,
-                opacity: Math.max(0.5, 1 - (sectionProgress.how || 0) * 0.6)
+                transform: `translateY(${(sectionProgress.how || 0) * -35}px)`,
+                transitionDelay: '150ms'
               }}
             >
               <div className="absolute inset-0 bg-gradient-to-br from-purple-600/10 to-transparent rounded-3xl opacity-0 group-hover:opacity-100 transition-all duration-500 blur-xl" />
@@ -655,10 +694,11 @@ const ABPlusVentures = () => {
 
             {/* Capital Card */}
             <div 
-              className="group relative parallax-text"
+              data-card="capital"
+              className={`group relative parallax-text ${visibleCards.has('capital') ? 'card-visible card-glow' : 'card-enter'}`}
               style={{
-                transform: `translateY(${(sectionProgress.how || 0) * -14}px)`,
-                opacity: Math.max(0.5, 1 - (sectionProgress.how || 0) * 0.6)
+                transform: `translateY(${(sectionProgress.how || 0) * -40}px)`,
+                transitionDelay: '300ms'
               }}
             >
               <div className="absolute inset-0 bg-gradient-to-br from-pink-600/10 to-transparent rounded-3xl opacity-0 group-hover:opacity-100 transition-all duration-500 blur-xl" />
@@ -711,8 +751,8 @@ const ABPlusVentures = () => {
           <div 
             className="text-xs tracking-[0.3em] sm:tracking-[0.4em] text-white/40 uppercase mb-6 sm:mb-8 font-light parallax-text"
             style={{ 
-              transform: `translateY(${(sectionProgress.focus || 0) * -20}px)`,
-              opacity: Math.max(0.3, 1 - (sectionProgress.focus || 0) * 0.5)
+              transform: `translateY(${(sectionProgress.focus || 0) * -50}px)`,
+              opacity: Math.max(0.2, 1 - (sectionProgress.focus || 0) * 0.8)
             }}
           >
             Focus
@@ -720,8 +760,8 @@ const ABPlusVentures = () => {
           <h2 
             className="text-4xl sm:text-5xl lg:text-6xl font-extralight tracking-tight mb-16 sm:mb-24 parallax-text"
             style={{ 
-              transform: `translateY(${(sectionProgress.focus || 0) * -30}px)`,
-              opacity: Math.max(0.5, 1 - (sectionProgress.focus || 0) * 0.4)
+              transform: `translateY(${(sectionProgress.focus || 0) * -60}px)`,
+              opacity: Math.max(0.3, 1 - (sectionProgress.focus || 0) * 0.7)
             }}
           >
             Where exponential curves steepen.
@@ -733,10 +773,11 @@ const ABPlusVentures = () => {
               return (
                 <div 
                   key={index}
-                  className="group relative p-8 sm:p-10 lg:p-12 border border-white/10 rounded-3xl hover:border-white/30 transition-all duration-500 overflow-hidden backdrop-blur-sm parallax-text"
+                  data-card={`focus-${index}`}
+                  className={`group relative p-8 sm:p-10 lg:p-12 border border-white/10 rounded-3xl hover:border-white/30 transition-all duration-500 overflow-hidden backdrop-blur-sm parallax-text ${visibleCards.has(`focus-${index}`) ? 'card-visible card-glow' : 'card-enter'}`}
                   style={{
-                    transform: `translateY(${(sectionProgress.focus || 0) * -(8 + index * 2)}px)`,
-                    opacity: Math.max(0.4, 1 - (sectionProgress.focus || 0) * (0.5 + index * 0.05))
+                    transform: `translateY(${(sectionProgress.focus || 0) * -(20 + index * 5)}px)`,
+                    transitionDelay: `${index * 100}ms`
                   }}
                 >
                   <div className={`absolute inset-0 bg-gradient-to-br ${area.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-500`}></div>
